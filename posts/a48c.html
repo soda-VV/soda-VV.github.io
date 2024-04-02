@@ -1,0 +1,433 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>『模糊测试』使用AFL进行模糊测试 | isoda's Blog</title><meta name="author" content="isoda,673828733@qq.com"><meta name="copyright" content="isoda"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="记录使用AFL进行软件模糊测试的过程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="『模糊测试』使用AFL进行模糊测试">
+<meta property="og:url" content="https://isoda.top/posts/a48c.html">
+<meta property="og:site_name" content="isoda&#39;s Blog">
+<meta property="og:description" content="记录使用AFL进行软件模糊测试的过程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240402142755581.png">
+<meta property="article:published_time" content="2024-04-02T06:22:42.000Z">
+<meta property="article:modified_time" content="2024-04-02T06:29:49.848Z">
+<meta property="article:author" content="isoda">
+<meta property="article:tag" content="模糊测试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240402142755581.png"><link rel="shortcut icon" href="https://isodatop.oss-cn-beijing.aliyuncs.com/img/SY7%7DZ%7B%28%28%7DTKN%29MJQGMMXJJ2.png"><link rel="canonical" href="https://isoda.top/posts/a48c.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文距离发布日期已经过去了：","messageNext":"天，部分资源可能已经不存在了，详情可以咨询作者"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体中文","cht_to_chs":"你已切换为简体中文","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#9400D3","bgDark":"#C0C0C0","position":"top-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '『模糊测试』使用AFL进行模糊测试',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-02 14:29:49'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240402142755581.png')"><nav id="nav"><span id="blog-info"><a href="/" title="isoda's Blog"><span class="site-name">isoda's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">『模糊测试』使用AFL进行模糊测试</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-02T06:22:42.000Z" title="发表于 2024-04-02 14:22:42">2024-04-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-02T06:29:49.848Z" title="更新于 2024-04-02 14:29:49">2024-04-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%B7%A5%E7%A8%8B%E8%AE%B0%E5%BD%95/">工程记录</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="『模糊测试』使用AFL进行模糊测试"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="模糊测试简介"><a href="#模糊测试简介" class="headerlink" title="模糊测试简介"></a>模糊测试简介</h1><p><strong>模糊测试（Fuzzing）</strong>，是一种挖掘软件安全漏洞、检测软件健壮性的黑盒测试方法，是目前软件测试、漏洞挖掘领域的最有效的手段之一，特别适合用于发现0Day漏洞。</p>
+<p>其<strong>主要原理</strong>在于：</p>
+<ul>
+<li>通过随机或是半随机的方式生成大量数据，</li>
+<li>将生成的数据输入给被测试的系统</li>
+<li>检测被测系统的状态，如是否能够响应、响应是否正确等</li>
+<li>根据被测系统的状态判断是否存在潜在的安全漏洞。</li>
+</ul>
+<p>目前比较成功的Fuzzer（执行模糊测试的程序）有AFL、libFuzzer、OSS-Fuzz等。</p>
+<h1 id="AFL简介"><a href="#AFL简介" class="headerlink" title="AFL简介"></a>AFL简介</h1><p>AFL（American Fuzzy Lop）是由安全研究员Michal Zalewski开发的一款基于覆盖引导（Coverage-guided）的模糊测试工具，它通过记录输入样本的代码覆盖率，从而调整输入样本以提高覆盖率，增加发现漏洞的概率。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240321161056683.png" alt="image-20240321161056683"></p>
+<p>调试人员为程序提供一些输入，即最左侧的testcases，AFL加载后将其放入一个队列中。对于每一次迭代，AFL首先从队列中取出一个testcase，然后对它进行修剪，去除不必要的数据以提高运行效率；再然后对输入进行变异操作，变异的模式很多，可以产生很多新的testcase。对于这些新产生的输入，将它们送到目标程序运行，若能够产生新的执行路径或者导致程序崩溃，就把它再放到队列中。在整个过程中，程序崩溃会被记录下来，它可能代表一个潜藏的漏洞。</p>
+<h2 id="AFL和LibFuzzer的区别"><a href="#AFL和LibFuzzer的区别" class="headerlink" title="AFL和LibFuzzer的区别"></a>AFL和LibFuzzer的区别</h2><p>LibFuzzer和AFL是目前最基本的两个模糊测试工具，而大部分的Fuzzer都是基于AFL和Libfuzzer进行进一步改进实现的，只要将这两个模糊测试工具弄明白，其它工具的安装和部署都是大同小异。</p>
+<p>AFL和LibFuzzer的区别</p>
+<ol>
+<li><strong>集成方式：</strong><ul>
+<li><strong>LibFuzzer：</strong> 通常与源代码直接集成，作为代码的一部分进行编译。它需要目标函数（即被测试的函数）的接口符合特定的格式（接受字节数组和长度作为参数）。</li>
+<li><strong>AFL：</strong> 可以作为一个独立的工具运行，不需要对源代码进行修改。它通过插桩技术来监控程序的执行，以此来引导测试用例的生成。</li>
+</ul>
+</li>
+<li><strong>测试用例生成：</strong><ul>
+<li><strong>LibFuzzer：</strong> 使用基于覆盖率的指导来动态生成测试用例，旨在最大化代码覆盖率。</li>
+<li><strong>AFL：</strong> 同样使用基于覆盖率的方法，但还结合了遗传算法来进化测试用例。</li>
+</ul>
+</li>
+<li><strong>使用场景：</strong><ul>
+<li><strong>LibFuzzer：</strong> 由于需要与源代码直接集成，因此更适合于对特定函数或模块进行深入的单元测试。</li>
+<li><strong>AFL：</strong> 由于可以作为独立工具运行，因此更适合于对整个应用程序进行模糊测试，包括二进制文件。</li>
+</ul>
+</li>
+</ol>
+<p>根据不同的场景，我们可以从AFL和LibFuzzer中做出选择</p>
+<h1 id="AFL的安装"><a href="#AFL的安装" class="headerlink" title="AFL的安装"></a>AFL的安装</h1><p>从 <a src="https://github.com/google/AFL">github项目主页</a> 下载压缩包，解压后进入所在目录。</p>
+<p>执行以下命令进行编译和安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<p>输入 <code>afl-fuzz</code> 测试是否编译成功</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240321170854676.png" alt="image-20240321170854676"></p>
+<h1 id="使用AFL进行模糊测试实战"><a href="#使用AFL进行模糊测试实战" class="headerlink" title="使用AFL进行模糊测试实战"></a>使用AFL进行模糊测试实战</h1><h2 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h2><ol>
+<li><p><strong>确定项目用什么语言编写</strong></p>
+<p>AFL主要用于C&#x2F;C++程序的测试，所以我们先要确定项目是否为C&#x2F;C++编写。（也有一些基于AFL的JAVA Fuzz程序如<a target="_blank" rel="noopener" href="https://github.com/isstac/kelinci">kelinci</a>、<a target="_blank" rel="noopener" href="https://github.com/Barro/java-afl">java-afl</a>等，但并不知道效果如何）</p>
+<p>如果要批量使用AFL进行模糊测试，如何判断项目的语言：</p>
+<ul>
+<li>项目提供了源代码：使用 <a src="https://github.com/github-linguist/linguist">github-linguist库</a> 进行判断</li>
+<li>项目仅提供二进制文件：</li>
+</ul>
+</li>
+<li><p><strong>是否有示例程序、测试用例</strong></p>
+<ul>
+<li><p>如果目标有现成的示例程序，特别是一些开源的库，可以方便我们直接用示例程序调用该库，不用自己再写一个程序</p>
+</li>
+<li><p>如果目标已经提供测试用例，那后面构建语料库时也省事儿一点</p>
+</li>
+</ul>
+</li>
+<li><p><strong>项目规模</strong></p>
+<p>某些程序规模很大，会被分为好几个模块，为了提高Fuzz效率，在Fuzzing前，需要定义Fuzzing部分。这里推荐一下源码阅读工具Understand，它 <code>treemap</code> 功能，可以直观地看到项目结构和规模。比如下面ImageMagick的源码中，灰框代表一个文件夹，蓝色方块代表了一个文件，其大小和颜色分别反映了行数和文件复杂度。</p>
+</li>
+</ol>
+<h2 id="构建语料库"><a href="#构建语料库" class="headerlink" title="构建语料库"></a>构建语料库</h2><p>AFL需要一些初始输入数据（即种子文件）作为Fuzzing的起点，这些输入甚至可以是毫无意义的数据，AFL可以通过启发式算法自动确定文件格式结构。</p>
+<p>尽管AFL如此强大，但如果要获得更快的Fuzzing速度，那么就有必要生成一个高质量的语料库，这一节就解决如何选择输入文件、从哪里寻找这些文件、如何精简找到的文件三个问题。</p>
+<h2 id="标准模式——有源码fuzz"><a href="#标准模式——有源码fuzz" class="headerlink" title="标准模式——有源码fuzz"></a>标准模式——有源码fuzz</h2><h3 id="编译插桩"><a href="#编译插桩" class="headerlink" title="编译插桩"></a>编译插桩</h3><p>首先我们可以自行用编写一个有漏洞的C语言程序 afl_test.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;signal.h&gt;</span> </span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">AFLTest</span><span class="params">(<span class="type">char</span> *str)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> len = <span class="built_in">strlen</span>(str);</span><br><span class="line">    <span class="keyword">if</span>(str[<span class="number">0</span>] == <span class="string">&#x27;A&#x27;</span> &amp;&amp; len == <span class="number">6</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        raise(SIGSEGV);</span><br><span class="line">        <span class="comment">//如果输入的字符串的首字符为A并且长度为6，则异常退出</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(str[<span class="number">0</span>] == <span class="string">&#x27;F&#x27;</span> &amp;&amp; len == <span class="number">16</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        raise(SIGSEGV);</span><br><span class="line">        <span class="comment">//如果输入的字符串的首字符为F并且长度为16，则异常退出</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(str[<span class="number">0</span>] == <span class="string">&#x27;L&#x27;</span> &amp;&amp; len == <span class="number">66</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        raise(SIGSEGV);</span><br><span class="line">        <span class="comment">//如果输入的字符串的首字符为F并且长度为66，则异常退出</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;it is good!\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">100</span>]=&#123;<span class="number">0</span>&#125;;</span><br><span class="line">    gets(buf);</span><br><span class="line">    <span class="comment">//存在栈溢出漏洞</span></span><br><span class="line">    <span class="built_in">printf</span>(buf);</span><br><span class="line">    <span class="comment">//存在格式化字符串漏洞</span></span><br><span class="line">    AFLTest(buf);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>对该源文件进行编译插桩</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">afl-gcc afl_test.c -o afl_test</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果编译一个c++的源码，使用afl-g++。</p>
+</blockquote>
+<p>现实情况下，我们往往需要对一整个项目而不是单个的C&#x2F;C++文件进行fuzz，所以需要指定afl-gcc&#x2F;afl-g++对整个项目进行编译插桩</p>
+<blockquote>
+<p>命令的具体含义与作用可以参考文章xx的 <code>linux下软件的发布与安装</code> 部分内容</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure CC=<span class="string">&quot;afl-gcc&quot;</span> CXX=<span class="string">&quot;afl-g++&quot;</span> --disable-shared <span class="comment"># 指定C和C++的编译器为afl所提供的编译插桩工具</span></span><br><span class="line">make 	<span class="comment"># 然后再进行编译</span></span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<p>编译后的结果如下图，可以看到对我们留下的漏洞产生了warning，不用理会</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240322154357305.png" alt="image-20240322154357305"></p>
+<h3 id="建立输入和输出文件夹"><a href="#建立输入和输出文件夹" class="headerlink" title="建立输入和输出文件夹"></a>建立输入和输出文件夹</h3><p>一般的程序接收的输入为标准输入流stdin类型或者文件类型</p>
+<blockquote>
+<p>stdin指的是从标准输入流（stdin，标准输入设备）中获取输入数据。</p>
+<p>stdin通常用于从终端（命令行）或其他程序中读取输入。这种方式可以让程序<strong>接受用户的交互式输入或从其他程序输出中获取数据</strong>，而<strong>无需直接依赖于文件或其他输入源</strong>。</p>
+</blockquote>
+<p>对于我们这个文件afl_test.c，可以知道接收的输入类型为stdin标准输入流</p>
+<p>建立两个文件夹：fuzz_in和fuzz_out，用来存放程序的输入和fuzz的输出结果。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> fuzz_in</span><br><span class="line"><span class="built_in">mkdir</span> fuzz_out</span><br></pre></td></tr></table></figure>
+
+<p>在fuzz_in文件夹下构建初始测试用例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> fuzz_in</span><br><span class="line">vim testcase</span><br></pre></td></tr></table></figure>
+
+<p>在testcae文件中写入程序的输入数据，这里也可以随意输入一点文本，作为起始种子。（因为afl会根据初始种子自动变异生成更多的测试样例，所以初始种子可以随意一点）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;asdsas&quot;</span> &gt;&gt; testcase</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>afl-fuzz</code>会将<code>testcase</code>文件中的内容作为输入，通过标准输入流（stdin）传递给目标程序。</p>
+<p>所以这里是基于stdin而并不是文件</p>
+</blockquote>
+<h3 id="使用-afl-fuzz-工具执行fuzz测试"><a href="#使用-afl-fuzz-工具执行fuzz测试" class="headerlink" title="使用 afl-fuzz 工具执行fuzz测试"></a>使用 afl-fuzz 工具执行fuzz测试</h3><p>针对程序不同的输入类型：</p>
+<ul>
+<li><p>从stdin读取输入的目标程序，fuzz命令语法如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./afl-fuzz -i testcase_dir -o findings_dir /path/to/program […params…]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>-i</code>：指定测试用例所在的目录，表示从该目录中读取输入数据。</li>
+<li><code>-o</code>：指定fuzz结果输出的目录</li>
+<li><code>/path/to/program</code>：表示目标程序的路径</li>
+<li><code>[...params...]</code>：表示其他可能的参数。</li>
+</ul>
+</li>
+<li><p>从文件读取输入的目标程序来说，语法如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./afl-fuzz -i testcase_dir -o findings_dir /path/to/program @@</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>使用如下命令执行fuzz：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./afl-fuzz -i fuzz_in -o fuzz_out ./easy_test</span><br></pre></td></tr></table></figure>
+
+<p>经过一个半小时的fuzz，总共找到了4条执行路径（对应前面的程序代码），8个crash。</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240326111143917.png" alt="image-20240326111143917"></p>
+<h3 id="结束fuzz"><a href="#结束fuzz" class="headerlink" title="结束fuzz"></a>结束fuzz</h3><p>afl-fuzz永远不会停止，所以何时停止测试很多时候就是依靠afl-fuzz提供的状态来决定的。具体的几种方式如下所示:</p>
+<ul>
+<li>状态窗口的<code>cycles done</code>变为绿色;</li>
+<li><code>afl-whatsup</code>查看afl-fuzz状态;</li>
+<li><code>afl-stat</code>得到类似于afl-whatsup的输出结果;</li>
+<li>定制 <code>afl-whatsup</code> -&gt;在所有代码外面加个循环就好;</li>
+<li>用 <code>afl-plot</code> 绘制各种状态指标的直观变化趋势;</li>
+<li><code>pythia</code>估算发现新crash和path概率。</li>
+</ul>
+<h3 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h3><h4 id="fuzz界面分析"><a href="#fuzz界面分析" class="headerlink" title="fuzz界面分析"></a>fuzz界面分析</h4><p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240326111143917.png" alt="image-20240326111143917"></p>
+<p>根据上面的fuzz界面图：</p>
+<ol>
+<li><p><strong>process timing</strong>:</p>
+<ul>
+<li><p><strong><code>last new path</code></strong> : 表示自从最后一个新路径被发现以来经过的时间。这可以帮助你了解新路径发现的频率。</p>
+<blockquote>
+<p>如果这个字段产生了报错，如：</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240329171431783.png" alt="image-20240329171431783"></p>
+<p>可能是因为：</p>
+<ol>
+<li><strong>语法错误</strong>：检查你的测试用例和目标程序，确保它们的语法正确。</li>
+<li><strong>测试用例不足</strong>：如果你提供的初始测试用例过于简单或不足以触发新的路径，AFL 可能无法有效地探索目标程序的状态空间。</li>
+<li><strong>代码覆盖率低</strong>：目标程序的某些部分可能难以触及，导致 AFL 无法发现新的路径。</li>
+<li><strong>目标程序简单</strong>：如果目标程序非常简单，可能只有很少的执行路径，因此 AFL 无法发现新的路径。</li>
+<li><strong>配置问题</strong>：检查 AFL 的配置设置，确保它们适合你的测试目标和环境。</li>
+</ol>
+<p>接下来要及时修正，不然继续fuzz也是徒劳（因为路径是不会改变的），可以采取以下解决方案：</p>
+<ul>
+<li><strong>增加测试用例</strong>：提供更多或更复杂的初始测试用例，以帮助 AFL 探索新的路径。</li>
+<li><strong>调整 AFL 设置</strong>：调整 AFL 的参数和设置，例如增加变异率或改变变异策略，以尝试发现新的路径。</li>
+<li><strong>优化目标程序</strong>：如果可能，修改目标程序以增加可触及的代码路径。</li>
+<li><strong>增加测试时间</strong>：延长测试的时间，给 AFL 更多的机会发现新的路径。</li>
+<li><strong>检查目标程序</strong>：确保目标程序没有错误，且适合模糊测试。</li>
+</ul>
+</blockquote>
+</li>
+<li><p><code>last uniq crash</code>: 表示自从最后一个独特崩溃被发现以来经过的时间。</p>
+</li>
+<li><p><code>last uniq hang</code>: 表示自从最后一个独特挂起被发现以来经过的时间。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>overall results</strong>：</p>
+<ul>
+<li><p><code>cycles done</code> : 表示 AFL 完成的模糊测试循环次数。每个循环包括一系列的变异测试用例。</p>
+<blockquote>
+<p>如果这个字段变绿就说明后面即使继续fuzz，出现crash的几率也很低了，可以选择在这个时候停止</p>
+</blockquote>
+</li>
+<li><p><code>total paths</code> : 表示 AFL 发现的总路径数量。每个路径代表程序执行中的一个独特分支或状态。</p>
+</li>
+<li><p><code>unique crashes</code> : 表示 AFL 发现的独特崩溃数量。这些崩溃可能是潜在漏洞的指示。</p>
+</li>
+<li><p><code>unique hangs</code> : 表示 AFL 发现的独特挂起数量。挂起可能是由于程序陷入无限循环或其他无响应状态造成的。</p>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><code>cycles done</code>：</li>
+<li><code>uniq crashes</code>：代表的是crash的数量</li>
+</ul>
+<ol start="3">
+<li><p>cycle progress</p>
+</li>
+<li><p>map coverage</p>
+</li>
+<li><p>stage progress</p>
+<p>包括正在测试的fuzzing策略、进度、目标的执行总次数、目标的执行速度。 执行速度可以直观地反映当前跑的快不快，如果速度过慢，我们可能需要进一步优化我们的Fuzzing。 </p>
+</li>
+<li><p>findings in depth</p>
+</li>
+<li><p>fuzzing strategy yields</p>
+</li>
+<li><p>path geometry</p>
+</li>
+</ol>
+<h4 id="fuzz-out分析"><a href="#fuzz-out分析" class="headerlink" title="fuzz_out分析"></a>fuzz_out分析</h4><p>使用 <code>tree</code> 命令查看out文件夹的目录结构</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240326162321739.png" alt="image-20240326162321739"></p>
+<p>目录中文件的作用：</p>
+<ul>
+<li>**queue&#x2F;**：存放所有具有独特执行路径的测试用例</li>
+<li>**crashes&#x2F;**： 存放能触发待测程序崩溃的测试样本</li>
+<li><strong>hangs&#x2F;</strong> ：存发导致待测程序超时的测试样本</li>
+<li><strong>fuzzer_stats</strong> - 文本文件，包含了fuzzer的实时统计信息，如执行速度、路径覆盖等度量指标。这个文件不断更新以反映当前的fuzzing状态。</li>
+<li><strong>plot_data</strong> - 文本文件，包含了AFL执行过程中的统计数据。使用AFL的<code>afl-plot</code>工具处理<code>plot_data</code>文件，可以生成fuzz过程的可视化图像。</li>
+<li><strong>fuzz_bitmap</strong> - 这是用来记录路径覆盖率的位图（coverage bitmap），非人类可读。AFL使用这个位图来跟踪程序在处理不同输入时执行的不同分支，用来帮助AFL识别新的、唯一的代码路径，以便后续生成更具有探索性的测试样本。</li>
+</ul>
+<p>查看 <code>fuzz_out/crashes</code> 文件夹，下面的十六进制文件即为产生崩溃的结果，</p>
+<p>可以通过 <code>xxd</code> 命令查看对应测试用例的内容</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240326161001683.png" alt="image-20240326161001683"></p>
+<p>可以看到产生crash的用例都符合栈溢出漏洞的情况</p>
+<h2 id="qemu模式——无源码黑盒测试"><a href="#qemu模式——无源码黑盒测试" class="headerlink" title="qemu模式——无源码黑盒测试"></a>qemu模式——无源码黑盒测试</h2><p>qemu模式为在没有源代码的情况下，直接对二进制程序进行fuzzing。注意此类方法准确度较低。</p>
+<h3 id="下载安装qemu"><a href="#下载安装qemu" class="headerlink" title="下载安装qemu"></a>下载安装qemu</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> qemu_mode</span><br><span class="line">./build_qemu_support.sh</span><br></pre></td></tr></table></figure>
+
+<p>当出现各种库的缺失报错，参考：<a src="https://blog.csdn.net/song_lee/article/details/105082092">深入分析 afl &#x2F; qemu-mode(qemu模式) &#x2F; afl-unicorn 编译及安装存在的问题以及相应的解决方案</a></p>
+<p>然后修改 <code>build_qemu_support.sh</code> 文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QEMU_URL=&quot;http://download.qemu-project.org/qemu-$&#123;VERSION&#125;.tar.xz&quot;</span><br></pre></td></tr></table></figure>
+
+<p>修改为</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QEMU_URL=&quot;http://download.qemu.org/qemu-$&#123;VERSION&#125;.tar.xz&quot;</span><br></pre></td></tr></table></figure>
+
+<p>删除掉红框部分</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240326201217863.png" alt="image-20240326201217863"></p>
+<p>找到下面这部分</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240326201323845.png" alt="image-20240326201323845"></p>
+<p>删除后三行，更换为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">patch -p1 &lt;../patches/syscall2.diff || exit 1</span><br><span class="line">patch -p1 &lt;../patches/memfd_create.diff || exit 1</span><br></pre></td></tr></table></figure>
+
+<p>添加补丁文件 <code>paches/syscall2.diff</code> ,文件内容如下：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--- qemu-2.10.0-clean/linux-user/syscall.c	2020-03-12 18:47:47.898592169 +0100</span></span><br><span class="line"><span class="comment">+++ qemu-2.10.0/linux-user/syscall.c	2020-03-12 19:16:41.563074307 +0100</span></span><br><span class="line"><span class="meta">@@ -34,6 +34,7 @@</span></span><br><span class="line"> #include &lt;sys/resource.h&gt;</span><br><span class="line"> #include &lt;sys/swap.h&gt;</span><br><span class="line"> #include &lt;linux/capability.h&gt;</span><br><span class="line"><span class="addition">+#include &lt;linux/sockios.h&gt; // https://lkml.org/lkml/2019/6/3/988</span></span><br><span class="line"> #include &lt;sched.h&gt;</span><br><span class="line"> #include &lt;sys/timex.h&gt;</span><br><span class="line"> #ifdef __ia64__</span><br><span class="line"><span class="meta">@@ -116,6 +117,8 @@</span> int __clone2(int (*fn)(void *), void *ch</span><br><span class="line"> #include &quot;qemu.h&quot;</span><br><span class="line"> </span><br><span class="line"><span class="addition">+extern unsigned int afl_forksrv_pid;</span></span><br><span class="line"><span class="addition">+</span></span><br><span class="line"> #ifndef CLONE_IO</span><br><span class="line"> #define CLONE_IO                0x80000000      /* Clone io context */</span><br><span class="line"> #endif</span><br><span class="line"> </span><br><span class="line"><span class="meta">@@ -256,7 +259,9 @@</span> static type name (type1 arg1,type2 arg2,</span><br><span class="line"> #endif</span><br><span class="line"> </span><br><span class="line"> #ifdef __NR_gettid</span><br><span class="line"><span class="deletion">-_syscall0(int, gettid)</span></span><br><span class="line"><span class="addition">+// taken from https://patchwork.kernel.org/patch/10862231/</span></span><br><span class="line"><span class="addition">+#define __NR_sys_gettid __NR_gettid</span></span><br><span class="line"><span class="addition">+_syscall0(int, sys_gettid)</span></span><br><span class="line"> #else</span><br><span class="line"> /* This is a replacement for the host gettid() and must return a host</span><br><span class="line">    errno. */</span><br><span class="line"><span class="meta">@@ -6219,7 +6224,8 @@</span> static void *clone_func(void *arg)</span><br><span class="line">     cpu = ENV_GET_CPU(env);</span><br><span class="line">     thread_cpu = cpu;</span><br><span class="line">     ts = (TaskState *)cpu-&gt;opaque;</span><br><span class="line"><span class="deletion">-    info-&gt;tid = gettid();</span></span><br><span class="line"><span class="addition">+    // taken from https://patchwork.kernel.org/patch/10862231/</span></span><br><span class="line"><span class="addition">+    info-&gt;tid = sys_gettid();</span></span><br><span class="line">     task_settid(ts);</span><br><span class="line">     if (info-&gt;child_tidptr)</span><br><span class="line">         put_user_u32(info-&gt;tid, info-&gt;child_tidptr);</span><br><span class="line"><span class="meta">@@ -6363,9 +6369,11 @@</span> static int do_fork(CPUArchState *env, un</span><br><span class="line">                mapping.  We can&#x27;t repeat the spinlock hack used above because</span><br><span class="line">                the child process gets its own copy of the lock.  */</span><br><span class="line">             if (flags &amp; CLONE_CHILD_SETTID)</span><br><span class="line"><span class="deletion">-                put_user_u32(gettid(), child_tidptr);</span></span><br><span class="line"><span class="addition">+                // taken from https://patchwork.kernel.org/patch/10862231/</span></span><br><span class="line"><span class="addition">+                put_user_u32(sys_gettid(), child_tidptr);</span></span><br><span class="line">             if (flags &amp; CLONE_PARENT_SETTID)</span><br><span class="line"><span class="deletion">-                put_user_u32(gettid(), parent_tidptr);</span></span><br><span class="line"><span class="addition">+                // taken from https://patchwork.kernel.org/patch/10862231/</span></span><br><span class="line"><span class="addition">+                put_user_u32(sys_gettid(), parent_tidptr);</span></span><br><span class="line">             ts = (TaskState *)cpu-&gt;opaque;</span><br><span class="line">             if (flags &amp; CLONE_SETTLS)</span><br><span class="line">                 cpu_set_tls (env, newtls);</span><br><span class="line"><span class="meta">@@ -11402,7 +11410,8 @@</span> abi_long do_syscall(void *cpu_env, int n</span><br><span class="line">         break;</span><br><span class="line"> #endif</span><br><span class="line">     case TARGET_NR_gettid:</span><br><span class="line"><span class="deletion">-        ret = get_errno(gettid());</span></span><br><span class="line"><span class="addition">+        // taken from https://patchwork.kernel.org/patch/10862231/</span></span><br><span class="line"><span class="addition">+        ret = get_errno(sys_gettid());</span></span><br><span class="line">         break;</span><br><span class="line"> #ifdef TARGET_NR_readahead</span><br><span class="line">     case TARGET_NR_readahead:</span><br></pre></td></tr></table></figure>
+
+<p>添加补丁文件 <code>paches/memfd_create.diff</code> ,文件内容如下：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">diff -ru qemu-2.10.0-clean/util/memfd.c qemu-2.10.0/util/memfd.c</span><br><span class="line"><span class="comment">--- qemu-2.10.0-clean/util/memfd.c      2018-11-20 18:11:00.170271506 +0100</span></span><br><span class="line"><span class="comment">+++ qemu-2.10.0/util/memfd.c    2018-11-20 18:11:13.398423613 +0100</span></span><br><span class="line"><span class="meta">@@ -37,7 +37,7 @@</span></span><br><span class="line"> #include &lt;sys/syscall.h&gt;</span><br><span class="line"> #include &lt;asm/unistd.h&gt;</span><br><span class="line"> </span><br><span class="line"><span class="deletion">-static int memfd_create(const char *name, unsigned int flags)</span></span><br><span class="line"><span class="addition">+int memfd_create(const char *name, unsigned int flags)</span></span><br><span class="line"> &#123;</span><br><span class="line"> #ifdef __NR_memfd_create</span><br><span class="line">     return syscall(__NR_memfd_create, name, flags);</span><br></pre></td></tr></table></figure>
+
+<p>再运行 <code>./build_qemu_support.sh</code> ，终于成功了</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240326201812776.png" alt="image-20240326201812776"></p>
+<h3 id="使用qemu模式fuzz"><a href="#使用qemu模式fuzz" class="headerlink" title="使用qemu模式fuzz"></a>使用qemu模式fuzz</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./afl-fuzz -i fuzz-in -o fuzz-out -Q ./mips-test</span><br></pre></td></tr></table></figure>
+
+<p>和有源码fuzz的区别就是加上了一个参数 <code>-Q</code> </p>
+<p>如果为文件输入记得在末尾加上 <code>@@</code></p>
+<h1 id="报错问题"><a href="#报错问题" class="headerlink" title="报错问题"></a>报错问题</h1><p>在执行 <code>./afl-fuzz -i fuzz_in -o fuzz_out ./easy_test</code> 命令的时候，产生了如下报错：</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240326203348393.png" alt="image-20240326203348393"></p>
+<p>按照报错信息，输入 <code>echo core &gt;/proc/sys/kernel/core_pattern</code>，提示权限不够的话可以输入以下代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> core | sudo <span class="built_in">tee</span> /proc/sys/kernel/core_pattern</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里是因为重定向操作符 <code>&gt;</code> 在执行前就已经获得了 sudo 权限，但是 <code>echo</code> 命令本身并没有获得 sudo 权限。</p>
+<p>解决方法是使用 <code>tee</code> 命令，因为 <code>tee</code> 命令可以将输入内容写入文件，而且可以使用 sudo 权限执行。</p>
+</blockquote>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240326094802123.png" alt="image-20240326094802123"></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ul>
+<li><a src="https://zhuanlan.zhihu.com/p/90037601">从AFL开始FUZZ之旅</a></li>
+<li><a src="https://www.freebuf.com/articles/system/191536.html">AFL漏洞挖掘技术漫谈（一）：用AFL开始你的第一次Fuzzing</a></li>
+<li><a src="https://blog.csdn.net/zhongzhehua/article/details/117717656">利用AFL进行模糊测试</a></li>
+<li><a src="https://zhuanlan.zhihu.com/p/680730032">模糊测试工具 AFL的原理与实践</a></li>
+<li><a src="https://blog.csdn.net/weixin_51214674/article/details/134646388?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522171145366716800182756803%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=171145366716800182756803&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~timeliness~default-3-134646388-null-null.142^v100^pc_search_result_base2&utm_term=afl%20qemu%E5%AE%89%E8%A3%85">模糊测试FUZZ——AFL安装使用</a></li>
+<li><a src="https://paper.seebug.org/842/">AFL 漏洞挖掘技术漫谈（二）：Fuzz 结果分析和代码覆盖率</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://isoda.top">isoda</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://isoda.top/posts/a48c.html">https://isoda.top/posts/a48c.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://isoda.top" target="_blank">isoda's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95/">模糊测试</a></div><div class="post_share"><div class="social-share" data-image="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240402142755581.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://isodatop.oss-cn-beijing.aliyuncs.com/img/QQ%E6%88%AA%E5%9B%BE20231208115838.png" target="_blank"><img class="post-qr-code-img" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/QQ%E6%88%AA%E5%9B%BE20231208115838.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/posts/fadc.html" title="『逆向』CrackMe001 Acid burn.exe逆向分析"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240402142027646.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">『逆向』CrackMe001 Acid burn.exe逆向分析</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">isoda</div><div class="author-info__description">简单 自律 高效</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/soda-VV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/soda-VV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:673828733@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">这里是isoda的个人博客，在这里分享我的学习与生活，致力于毕业当公务员摆烂，有问题欢迎探讨交流</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">模糊测试简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AFL%E7%AE%80%E4%BB%8B"><span class="toc-number">2.</span> <span class="toc-text">AFL简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">2.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AFL%E5%92%8CLibFuzzer%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.2.</span> <span class="toc-text">AFL和LibFuzzer的区别</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AFL%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">3.</span> <span class="toc-text">AFL的安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8AFL%E8%BF%9B%E8%A1%8C%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95%E5%AE%9E%E6%88%98"><span class="toc-number">4.</span> <span class="toc-text">使用AFL进行模糊测试实战</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87"><span class="toc-number">4.1.</span> <span class="toc-text">前置准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E8%AF%AD%E6%96%99%E5%BA%93"><span class="toc-number">4.2.</span> <span class="toc-text">构建语料库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E6%9C%89%E6%BA%90%E7%A0%81fuzz"><span class="toc-number">4.3.</span> <span class="toc-text">标准模式——有源码fuzz</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E6%8F%92%E6%A1%A9"><span class="toc-number">4.3.1.</span> <span class="toc-text">编译插桩</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">4.3.2.</span> <span class="toc-text">建立输入和输出文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-afl-fuzz-%E5%B7%A5%E5%85%B7%E6%89%A7%E8%A1%8Cfuzz%E6%B5%8B%E8%AF%95"><span class="toc-number">4.3.3.</span> <span class="toc-text">使用 afl-fuzz 工具执行fuzz测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9D%9Ffuzz"><span class="toc-number">4.3.4.</span> <span class="toc-text">结束fuzz</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90"><span class="toc-number">4.3.5.</span> <span class="toc-text">结果分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#fuzz%E7%95%8C%E9%9D%A2%E5%88%86%E6%9E%90"><span class="toc-number">4.3.5.1.</span> <span class="toc-text">fuzz界面分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#fuzz-out%E5%88%86%E6%9E%90"><span class="toc-number">4.3.5.2.</span> <span class="toc-text">fuzz_out分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#qemu%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E6%97%A0%E6%BA%90%E7%A0%81%E9%BB%91%E7%9B%92%E6%B5%8B%E8%AF%95"><span class="toc-number">4.4.</span> <span class="toc-text">qemu模式——无源码黑盒测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85qemu"><span class="toc-number">4.4.1.</span> <span class="toc-text">下载安装qemu</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8qemu%E6%A8%A1%E5%BC%8Ffuzz"><span class="toc-number">4.4.2.</span> <span class="toc-text">使用qemu模式fuzz</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98"><span class="toc-number">5.</span> <span class="toc-text">报错问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-number">6.</span> <span class="toc-text">参考文章</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/a48c.html" title="『模糊测试』使用AFL进行模糊测试"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240402142755581.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『模糊测试』使用AFL进行模糊测试"/></a><div class="content"><a class="title" href="/posts/a48c.html" title="『模糊测试』使用AFL进行模糊测试">『模糊测试』使用AFL进行模糊测试</a><time datetime="2024-04-02T06:22:42.000Z" title="发表于 2024-04-02 14:22:42">2024-04-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/fadc.html" title="『逆向』CrackMe001 Acid burn.exe逆向分析"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240402142027646.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『逆向』CrackMe001 Acid burn.exe逆向分析"/></a><div class="content"><a class="title" href="/posts/fadc.html" title="『逆向』CrackMe001 Acid burn.exe逆向分析">『逆向』CrackMe001 Acid burn.exe逆向分析</a><time datetime="2024-03-20T10:00:23.000Z" title="发表于 2024-03-20 18:00:23">2024-03-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/a4a5.html" title="『XSS攻击』XSS攻击进阶：XSS payload"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/R.7bed854de434dd65014dc58603b8acfc" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『XSS攻击』XSS攻击进阶：XSS payload"/></a><div class="content"><a class="title" href="/posts/a4a5.html" title="『XSS攻击』XSS攻击进阶：XSS payload">『XSS攻击』XSS攻击进阶：XSS payload</a><time datetime="2024-03-07T08:46:51.000Z" title="发表于 2024-03-07 16:46:51">2024-03-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/13a2.html" title="『XSS攻击』XSS简介"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/R.7bed854de434dd65014dc58603b8acfc" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『XSS攻击』XSS简介"/></a><div class="content"><a class="title" href="/posts/13a2.html" title="『XSS攻击』XSS简介">『XSS攻击』XSS简介</a><time datetime="2024-03-06T02:30:46.000Z" title="发表于 2024-03-06 10:30:46">2024-03-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/77ff.html" title="『浏览器安全』浏览器同源策略与沙箱"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/R.f54d1cf1d1e34b8bca603a4f94de3b88" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『浏览器安全』浏览器同源策略与沙箱"/></a><div class="content"><a class="title" href="/posts/77ff.html" title="『浏览器安全』浏览器同源策略与沙箱">『浏览器安全』浏览器同源策略与沙箱</a><time datetime="2024-03-06T02:24:51.000Z" title="发表于 2024-03-06 10:24:51">2024-03-06</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240402142755581.png')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By isoda</div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
