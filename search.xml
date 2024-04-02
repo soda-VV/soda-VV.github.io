@@ -281,6 +281,33 @@
     </entry>
     
     
+    
+    <entry>
+      <title>『Git』Git使用教程</title>
+      <link href="/posts/b860.html"/>
+      <url>/posts/b860.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="克隆GitHub仓库到本地"><a href="#克隆GitHub仓库到本地" class="headerlink" title="克隆GitHub仓库到本地"></a>克隆GitHub仓库到本地</h1><p>方法一：Code -&gt; Download ZIP（有的时候会有一些问题，不建议）</p><p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20231215133946737.png" alt="image-20231215133946737"></p><p><strong>方法二：使用git clone项目到本地（推荐）</strong></p><p>Code -&gt; 复制HTTPS协议对应的url。</p><p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20231215134218730.png" alt="image-20231215134218730"></p><p>在本地文件夹打开Git Bash，在命令行中输入以下命令，将仓库克隆到本地（这里的仓库地址就是上面复制的url）：</p><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">clone</span> <span class="title">仓库地址</span></span><br></pre></td></tr></table></figure><p>执行命令后，Git就会从GitHub服务器上将仓库的所有文件和历史记录克隆到你的本地目录中。克隆完成后，你可以在当前目录下找到一个与仓库同名的文件夹，里面包含了完整的仓库内容。</p><p>后续可以安装相关依赖等</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install -r requirements.txt --user</span><br></pre></td></tr></table></figure><h1 id="本地代码和GitHub同步"><a href="#本地代码和GitHub同步" class="headerlink" title="本地代码和GitHub同步"></a>本地代码和GitHub同步</h1><h2 id="将github项目pull到本地"><a href="#将github项目pull到本地" class="headerlink" title="将github项目pull到本地"></a>将github项目pull到本地</h2><p><strong>第一次pull：</strong></p><p>即将远程代码仓库中(新)的内容下载到本地，并更新本地代码仓库的内容，我们一般叫pull。</p><p>首先需要在本地创建一个空文件夹，作为项目的存放仓库。然后进入该文件夹下，打开Git Bush，输入以下命令将该目录初始化为Git仓库。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git init</span><br></pre></td></tr></table></figure><p>（之后该处会生成一个隐藏的文件夹【.git】）</p><p>然后将这个本地仓库连接到Github上的对应项目</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add origin 远程仓库地址</span><br></pre></td></tr></table></figure><p>这里的远程仓库地址就是前面所复制的HTTPS协议对应的url</p><blockquote><p>如果不小心填错了，可以使用指令清除地址重新设置</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote remove origin </span><br></pre></td></tr></table></figure><p>同样也可以执行命令查看是否连接成功</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br></pre></td></tr></table></figure></blockquote><p>然后，使用Pull指令拉取代码，从远程源的主分支更新代码到本地</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git pull origin master</span><br></pre></td></tr></table></figure><p><strong>后续拉取github上的更新到本地：只需要git pull即可</strong></p><h2 id="将本地项目push到github"><a href="#将本地项目push到github" class="headerlink" title="将本地项目push到github"></a>将本地项目push到github</h2><p>第一次push：</p><p>同样的，创建空文件夹后git init</p><p>执行add命令<strong>将整个文件夹添加到本地仓库</strong>，注意后面有一个点</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure><blockquote><p>如果只想添加单个文件使用命令：<code> git add 文件名</code> 这种方式 ，例如：git add test.txt.</p></blockquote><p><strong>后续将本地更新后的代码上传到GitHub只需要</strong></p><p>如果在多个远程设备上操作，记得开始进行今日的操作前要先：</p><p>git pull</p><p>完成所有操作准备离开时要记得：</p><p>git add .<br>git commit -m ‘xx’<br>git push</p><p>tip: 要保证本地库和server是同步的，不然忘记先pull，若其他远程设备上已经push了新的内容，自己这里是push不上去的，只能进行git pull合并，这个操作还会覆盖你已经更改了的部分，会非常痛苦qwq。</p><h1 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h1><ul><li><strong>error: src refspec master does not match any</strong>：<ul><li>解决：<a href="https://blog.csdn.net/qq_38198952/article/details/82792279">https://blog.csdn.net/qq_38198952/article/details/82792279</a></li></ul></li></ul><h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p>侵权删：</p><ul><li><a href="https://devpress.csdn.net/cloud-native/64ffdfd8993dd34278ee2d52.html">https://devpress.csdn.net/cloud-native/64ffdfd8993dd34278ee2d52.html</a></li><li><a href="https://blog.csdn.net/daydayup858/article/details/128201627">https://blog.csdn.net/daydayup858/article/details/128201627</a></li><li><a href="https://zhuanlan.zhihu.com/p/438410278">https://zhuanlan.zhihu.com/p/438410278</a></li><li><a href="https://blog.csdn.net/qq_45583787/article/details/126882580">https://blog.csdn.net/qq_45583787/article/details/126882580</a></li><li><a href="https://blog.csdn.net/vir_lee/article/details/80464408">https://blog.csdn.net/vir_lee/article/details/80464408</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具使用 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Git </tag>
+            
+            <tag> 版本控制 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
   
   
 </search>
