@@ -20,6 +20,8 @@
       
         <tags>
             
+            <tag> 跨站脚本攻击 </tag>
+            
             <tag> 点击劫持 </tag>
             
         </tags>
@@ -29,7 +31,7 @@
     
     
     <entry>
-      <title>『CSRF攻击』跨站点请求伪造</title>
+      <title>『跨站脚本攻击』CSRF攻击</title>
       <link href="/posts/3f8b.html"/>
       <url>/posts/3f8b.html</url>
       
@@ -45,6 +47,8 @@
       
         <tags>
             
+            <tag> 跨站脚本攻击 </tag>
+            
             <tag> CSRF攻击 </tag>
             
         </tags>
@@ -54,7 +58,7 @@
     
     
     <entry>
-      <title>『XSS攻击』XSS防御</title>
+      <title>『跨站脚本攻击』CSRF攻击</title>
       <link href="/posts/ceb6.html"/>
       <url>/posts/ceb6.html</url>
       
@@ -70,6 +74,8 @@
       
         <tags>
             
+            <tag> 跨站脚本攻击 </tag>
+            
             <tag> XSS攻击 </tag>
             
         </tags>
@@ -79,7 +85,7 @@
     
     
     <entry>
-      <title>『XSS攻击』XSS构造技巧</title>
+      <title>『跨站脚本攻击』XSS构造技巧</title>
       <link href="/posts/6df.html"/>
       <url>/posts/6df.html</url>
       
@@ -94,6 +100,8 @@
       
       
         <tags>
+            
+            <tag> 跨站脚本攻击 </tag>
             
             <tag> XSS攻击 </tag>
             
@@ -179,7 +187,7 @@
     
     
     <entry>
-      <title>『XSS攻击』XSS攻击进阶：XSS payload</title>
+      <title>『跨站脚本攻击』XSS攻击进阶——XSS payload</title>
       <link href="/posts/a4a5.html"/>
       <url>/posts/a4a5.html</url>
       
@@ -195,6 +203,8 @@
       
         <tags>
             
+            <tag> 跨站脚本攻击 </tag>
+            
             <tag> XSS攻击 </tag>
             
         </tags>
@@ -204,7 +214,7 @@
     
     
     <entry>
-      <title>『XSS攻击』XSS简介</title>
+      <title>『跨站脚本攻击』XSS简介</title>
       <link href="/posts/13a2.html"/>
       <url>/posts/13a2.html</url>
       
@@ -219,6 +229,8 @@
       
       
         <tags>
+            
+            <tag> 跨站脚本攻击 </tag>
             
             <tag> XSS攻击 </tag>
             
