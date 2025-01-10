@@ -1,0 +1,389 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>『跨站点请求伪造』CSRF攻击 | isoda's Blog</title><meta name="author" content="isoda,673828733@qq.com"><meta name="copyright" content="isoda"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="CSRF攻击的详细介绍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="『跨站点请求伪造』CSRF攻击">
+<meta property="og:url" content="https://isoda.top/posts/3f8b.html">
+<meta property="og:site_name" content="isoda&#39;s Blog">
+<meta property="og:description" content="CSRF攻击的详细介绍">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://isodatop.oss-cn-beijing.aliyuncs.com/img/csrf-tokens-dark.png">
+<meta property="article:published_time" content="2024-06-02T00:20:44.000Z">
+<meta property="article:modified_time" content="2024-12-06T07:30:54.563Z">
+<meta property="article:author" content="isoda">
+<meta property="article:tag" content="客户端脚本安全">
+<meta property="article:tag" content="CSRF攻击">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://isodatop.oss-cn-beijing.aliyuncs.com/img/csrf-tokens-dark.png"><link rel="shortcut icon" href="https://isodatop.oss-cn-beijing.aliyuncs.com/img/SY7%7DZ%7B%28%28%7DTKN%29MJQGMMXJJ2.png"><link rel="canonical" href="https://isoda.top/posts/3f8b.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文距离发布日期已经过去了：","messageNext":"天，部分资源可能已经不存在了，详情可以咨询作者"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体中文","cht_to_chs":"你已切换为简体中文","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#9400D3","bgDark":"#C0C0C0","position":"top-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '『跨站点请求伪造』CSRF攻击',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-12-06 15:30:54'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">30</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/csrf-tokens-dark.png')"><nav id="nav"><span id="blog-info"><a href="/" title="isoda's Blog"><span class="site-name">isoda's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">『跨站点请求伪造』CSRF攻击</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-06-02T00:20:44.000Z" title="发表于 2024-06-02 08:20:44">2024-06-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-06T07:30:54.563Z" title="更新于 2024-12-06 15:30:54">2024-12-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/web%E5%AE%89%E5%85%A8/">web安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>11分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="『跨站点请求伪造』CSRF攻击"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="定义与原理"><a href="#定义与原理" class="headerlink" title="定义与原理"></a>定义与原理</h1><ul>
+<li><p><strong>定义</strong></p>
+<p>CSRF（Cross Site Request Forgery，跨站点请求伪造）</p>
+<p><strong>通过伪装成受信任用户请求受信任的网站</strong>。对服务器来说这个请求是完全合法的，但是却完成了攻击者所期望的一个操作，比如以你的名义发送邮件、发消息，盗取你的账号，添加系统管理员，甚至于购买商品、虚拟货币转账等</p>
+</li>
+<li><p><strong>例子</strong></p>
+<p>假设请求这个url可以删除掉编号为156713012的搜狐博客文章</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://blog.sohu.com/mange/entry.do?m=delete&amp;id=156713012</span><br></pre></td></tr></table></figure>
+
+<p>假设这个url同时还存在csrf漏洞，我们可以尝试利用这个漏洞，删除掉这篇文章。</p>
+<p>攻击者可以首先在自己的域构造一个页面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.a.com/csrf.html</span><br></pre></td></tr></table></figure>
+
+<p>其中包含一个img标签，指向上面的删除博客文章的链接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;http://blog.sohu.com/manage/entry.do?m=delete&amp;id=156713012&quot; /&gt;</span><br></pre></td></tr></table></figure>
+
+<p>攻击者可以诱使博主访问自己构造的页面 <code>http://www.a.com/csrf.html</code>，博主看到的是一个无法显示的图片，此时博客文章已经被删除掉了。</p>
+<p>原因就是：博主在访问该页面的时候，图片标签向搜狐服务器发送了一次GET请求，删除了文章。</p>
+</li>
+</ul>
+<h1 id="CSRF进阶"><a href="#CSRF进阶" class="headerlink" title="CSRF进阶"></a>CSRF进阶</h1><h2 id="浏览器的Cookie策略"><a href="#浏览器的Cookie策略" class="headerlink" title="浏览器的Cookie策略"></a>浏览器的Cookie策略</h2><p>一般csrf攻击的目标需要使用cookie</p>
+<ol>
+<li><p><strong>浏览器所持有的Cookie分为两种</strong></p>
+<ul>
+<li><p><strong>Session Cookie（临时Cookie）</strong></p>
+<ul>
+<li>没有指定Expire时间，保存在内存中，所以浏览器关闭后，Session Cookie就失效了。</li>
+<li>浏览网站，若是一个网站设置了Session Cookie，那么在浏览器进程的生命周期内，即使浏览器新打开了Tab页，因为新Tab页在同一个浏览器进程中，Session Cookie也都是有效的，因此<strong>Session Cookie将被发送</strong>。</li>
+</ul>
+</li>
+<li><p><strong>Third-party Cookie（本地Cookie）</strong></p>
+<ul>
+<li>服务器在Set-Cookie时指定了Expire时间，只有到了Expire时间后Cookie才会失效，所以这种Cookie会保存在本地</li>
+<li>如果浏览器从一个域的页面中，要加载另一个域的资源，由于安全原因，<strong>某些浏览器会阻止Third-party Cookie的发送</strong>。</li>
+</ul>
+<blockquote>
+<p>例如，攻击者可以在自己的域上（b.com&#x2F;csrf.html）构造 <code>iframe</code>、<code>&lt;img&gt;</code>、<code>&lt;script&gt;</code> 、<code>&lt;link&gt;</code>等标签</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe src=&quot;http://www.a.com&quot;&gt;&lt;/iframe&gt;</span><br></pre></td></tr></table></figure>
+
+<p>抓包可以发现，发送出了 <code>Session Cookie</code></p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><strong>每个浏览器的拦截策略不同</strong></p>
+<ul>
+<li><p>火狐默认允许发送本地Cookie：用户访问b.com，利用本地直接发送即可成功</p>
+</li>
+<li><p><a id="t1">IE浏览器不允许发送本地Cookie</a>：需要诱使用户在当前浏览器中先访问<code>http://www.a.com</code>，让Session cookie有效，然后再实施CSRF攻击。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="P3P头的副作用"><a href="#P3P头的副作用" class="headerlink" title="P3P头的副作用"></a>P3P头的副作用</h2><p>有些CSRF攻击并不需要进行认证，不需要发送cookie</p>
+<ol>
+<li><p><strong>P3P头的定义</strong></p>
+<p>P3P Header（The Platform for Privacy Preferences）是W3C制定的一项关于隐私的标准。</p>
+</li>
+<li><p><strong>P3P头的作用</strong></p>
+<ul>
+<li><p>如果网站返回给浏览器的HTTP头中包含有P3P头，则在某种程度上来说，将允许浏览器发送第三方Cookie。这种情况下即使是IE的<code>&lt;iframe&gt;</code>、<code>&lt;script&gt;</code>等标签也将不再拦截第三方Cookie的发送。</p>
+</li>
+<li><p>在网站的业务中，P3P头主要用于类似广告等需要跨域访问的页面。但是P3P头设置后，对于Cookie的影响将扩大到整个域中的所有页面，因为Cookie是以域和path为单位的，不符合“最小权限”原则。</p>
+</li>
+<li><p>P3P头只需要由网站设置一次即可，滞后每次请求都会遵循此策略，不需要重复设置。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>例子</strong></p>
+<p><code>http://www.b.com/test.html</code> 代码如下</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe width=300 height=300 src=&quot;http;//www.a.com/test.php&quot;&gt;&lt;/iframe&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>http://b.com</code> 中请求 <code>test.html</code>，它的 <code>iframe</code> 会告诉浏览器去跨域请求<code>http://http://www.a.com/test.php</code> 。</p>
+<p><code>http://http://www.a.com/test.php</code> 的代码如下</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">header&#123;&quot;Set-Cookie:test=axis;domain=.a.com;path=/&quot;&#125;; //临时cookie</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>而由于浏览器的同源策略，这里的set-cookie是不会成功的（无论是临时还是本地cookie都不会成功）</p>
+<blockquote>
+<p>注意这里和<a href="#t1">上面的例子</a>的区别：</p>
+<p><strong>同源策略主要限制跨域请求时设置和读取Cookie</strong></p>
+<p>上面的例子是用户主动访问<code>http://www.a.com</code>，这个请求是同源的，因为请求的源（浏览器中当前访问的页面）和目标源（<code>http://www.a.com</code>）是相同的。由于是同源请求，服务器可以成功地设置Session Cookie。浏览器会接受并存储这个Cookie。</p>
+<p>当用户再访问攻击页面（<code>http://www.b.com/csrf.html</code>），这个页面包含一个指向<code>http://www.a.com</code>的<code>&lt;iframe&gt;</code>或其他请求。虽然这个请求是跨域的，但因为Session Cookie已经存在于浏览器中，所以浏览器会自动附带这个Session Cookie发送请求。</p>
+<p>而<strong>这里的例子是跨域请求直接尝试设置Cookie</strong>，所以浏览器会拒绝这个操作，这是同源策略的限制。</p>
+</blockquote>
+<p>但是，在加入P3P头的情况下：P3P头允许跨域访问隐私数据，从而可以跨域set-cookie成功。</p>
+<ul>
+<li><p>正因为P3P头目前在网站的应用中被广泛应用，因此在CSRF的防御中不能依赖于浏览器对第三方Cookie的拦截策略，不能心存侥幸。</p>
+</li>
+<li><p>很多时候，如果测试CSRF时发现<code>&lt;iframe&gt;</code>等标签在IE中居然能发送Cookie，而又找不到原因，那么很可能就是因为P3P头在作怪。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="GET和POST"><a href="#GET和POST" class="headerlink" title="GET和POST"></a>GET和POST</h2><p>大多数CSRF攻击发起时，使用的HTML标签都是<code>&lt;img&gt;</code> 、<code>&lt;iframe&gt;</code> 、<code>&lt;script&gt;</code> 等带“src”属性的标签，这类标签只能够发起一次GET请求，而不能发起POST请求。</p>
+<p>但是，这并不表示只要把重要的操作改成只允许POST请求，就能防止CSRF攻击。</p>
+<ul>
+<li><p><strong>情景1：服务器没有区分get和post请求</strong></p>
+<ul>
+<li><p>对于很多网站的应用来说，一些重要操作并未严格地区分GET与POST，攻击者可以使用GET来请求表单的提交地址。比如在PHP中，如果使用的是<code>$_REQUEST</code>，而非<code>$_POST</code>变量，则会存在这个问题。</p>
+</li>
+<li><p>例子：</p>
+<p>以下表单</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;form action=&quot;/register&quot; id=&quot;register&quot; method=&quot;post&quot;&gt;</span><br><span class="line">&lt;input type=text name=&quot;username&quot; value=&quot;&quot; /&gt;</span><br><span class="line">&lt;input type=password name=&quot;password&quot; value=&quot;&quot; /&gt;</span><br><span class="line">&lt;input type=submit name=&quot;submit&quot; value=&quot;&quot; /&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+
+<p>用户可以尝试构造一个GET请求</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://host/register?username=test&amp;password=passwd</span><br></pre></td></tr></table></figure>
+
+<p><u>如果服务器没有区分get和post请求，那么这个请求会通过。</u></p>
+</li>
+</ul>
+</li>
+<li><p><strong>情景2：服务器区分get和post请求，可以在攻击代码中构造Post</strong></p>
+<ul>
+<li><p>服务器区分get和post请求的情况下，仍然可以在一个页面中构造好一个form表单，然后使用JavaScript自动提交这个表单。</p>
+</li>
+<li><p>例子：</p>
+<p><code>http://www.b.com/test.html</code> 中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;form action=&quot;http://www.a.com/register&quot; id=&quot;register&quot; method=&quot;post&quot; &gt;</span><br><span class="line">&lt;input type=text name=&quot;username&quot; value=&quot;&quot; /&gt;</span><br><span class="line">&lt;input type=password name=&quot;password&quot; value=&quot;&quot; /&gt;</span><br><span class="line">&lt;input type=submit name=&quot;submit&quot; value=&quot;submit&quot; /&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">var f = document.getElementById(&quot;register&quot;);</span><br><span class="line">f.inputs[0].value = &quot;test&quot;;</span><br><span class="line">f.inputs[1].value = &quot;passwd&quot;;</span><br><span class="line">f.submit();</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>可以<strong>将这个页面隐藏在一个不可见的iframe窗口中</strong>，那么整个自动提交表单的过程，对于用户来说也是不可见的。可以成功实现攻击（前提是获取到了cookie）</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="CSRF-worm"><a href="#CSRF-worm" class="headerlink" title="CSRF worm"></a>CSRF worm</h2><p>2008年9月，国内的安全组织80sec公布了一个百度的CSRF Worm。 漏洞出现在百度用户中心的发送短消息功能中：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://msg.baidu.com/?ct=22&amp;cm=MailSend&amp;tn=bmSubmit&amp;sn=用户账户&amp;co=消息内容</span><br></pre></td></tr></table></figure>
+
+<p>只需要修改参数sn，即可对指定的用户发送短消息。</p>
+<p>百度的另外一个接口则能查询出某个用户的所有好友：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://frd.baidu.com/?ct=28&amp;un=用户账户&amp;cm=FriList&amp;tn=bmABCFriList&amp;callback=gotfriends</span><br></pre></td></tr></table></figure>
+
+<p>将两者结合起来，可以组成一个CSRF Worm——让一个百度用户查看恶意页面后，将给他的所有好友发送一条短消息，然后这条短消息中又包含一张图片，其地址再次指向CSRF页面，使得这些好友再次将消息发给他们的好友，这个Worm因此得以传播。</p>
+<h1 id="CSRF防御"><a href="#CSRF防御" class="headerlink" title="CSRF防御"></a>CSRF防御</h1><h2 id="验证码"><a href="#验证码" class="headerlink" title="验证码"></a>验证码</h2><ol>
+<li><p><strong>概念</strong></p>
+<p>验证码被认为是对抗CSRF攻击<strong>最简洁而有效的防御方法</strong>。 </p>
+<p>CSRF攻击的过程，往往是在用户不知情的情况下构造了网络请求。而验证码，则强制用户必须与应用进行交互，才能完成最终请求。</p>
+</li>
+<li><p><strong>缺点</strong></p>
+<ul>
+<li>但是很多时候，出于用户体验考虑，网站不能给所有的操作都加上验证码。</li>
+</ul>
+<p>因此，验证码只能作为防御CSRF的一种辅助手段，而不能作为最主要的解决方案。</p>
+</li>
+</ol>
+<h2 id="Referer-Check"><a href="#Referer-Check" class="headerlink" title="Referer Check"></a>Referer Check</h2><ol>
+<li><p><strong>概念</strong></p>
+<p>常见的互联网应用，页面与页面之间都具有一定的逻辑关系，这就使得每个正常请求的Referer具有一定的规律。</p>
+<p>例，一个“论坛发帖”的操作，在正常情况下需要先登录到用户后台，或者访问有发帖功能的页面。在提交“发帖”的表单时，Referer的值必然是发帖表单所在的页面。如果Referer的值不是这个页面，甚至不是发帖网站的域，则极有可能是CSRF攻击。</p>
+</li>
+<li><p><strong>缺点</strong></p>
+<ul>
+<li>服务器并非什么时候都能取到Referer。</li>
+<li>很多用户出于隐私保护的考虑，限制了Referer的发送。</li>
+<li>在某些情况下，浏览器也不会发送Referer。例如：从HTTPS跳转到HTTP，出于安全的考虑，浏览器也不会发送Referer。</li>
+</ul>
+<p>无法依赖于Referer Check作为防御CSRF的主要手段，可以通过Referer Check来监控CSRF攻击的发生。</p>
+</li>
+</ol>
+<h2 id="Anti-CSRF-Token"><a href="#Anti-CSRF-Token" class="headerlink" title="Anti CSRF Token"></a>Anti CSRF Token</h2><p>目前<strong>业界针对CSRF的防御</strong>，一致的做法是使用Token</p>
+<ol>
+<li><p><strong>为什么使用Token</strong></p>
+<p>CSRF能够攻击成功，其本质原因是重要操作的所有参数都是可以被攻击者猜测到的。</p>
+<p>出于这个原因，可以想到一个解决方案：<strong>把参数加密，或者使用一些随机数</strong>，从而让攻击者无法猜测到参数值，这就是token</p>
+</li>
+<li><p><strong>具体方法</strong></p>
+<p>URL中，保持原参数不变，新增一个参数Token，值随机且不可预测：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://host/path/delete?username=abc&amp;item=123&amp;token=[random(seed)]</span><br></pre></td></tr></table></figure>
+
+<p>Token需要足够随机，必须使用足够安全的随机数生成算法，或者采用真随机数生成器，且为用户与服务器所共同持有，不能被第三者知晓。在实际应用时，Token可以放在用户的Session中，或者浏览器的Cookie中。</p>
+<p>由于Token的存在，黑客无法再构造出一个完整的URL实施CSRF攻击。</p>
+<p>在提交请求时，服务器只需验证表单中的Token，与用户Session（或Cookie）中的Token是否一致，如果一致，则认为是合法请求；如果不一致，或者有一个为空，则认为请求不合法，可能发生了CSRF攻击。</p>
+</li>
+<li><p><strong>Token的使用原则</strong></p>
+<ul>
+<li><p>Token的生成一定要足够随机</p>
+</li>
+<li><p>设置一个用户的有效生命周期，在Token消耗掉前都使用同一个Token。</p>
+<blockquote>
+<p>如果用户已经提交了表单，则这个Token已经消耗掉，应该再次重新生成一个新的Token。</p>
+<p>如果Token保存在Cookie中，而不是服务器端的Session中，一个用户打开几个相同的页面同时操作，当某个页面消耗掉Token后，其他页面的表单内保存的还是被消耗掉的那个Token，因此其他页面的表单再次提交时，会出现Token错误。在这种情况下，可以考虑<strong>生成多个有效的Token，以解决多页面共存的场景</strong>。</p>
+</blockquote>
+</li>
+<li><p>保密性</p>
+<ul>
+<li><p><strong>Token如果出现在某个页面的URL中，则可能会通过Referer的方式泄露。</strong></p>
+<p>在使用Token时，应该尽量把Token放在表单中。把敏感操作由GET改为POST，以form表单（或者AJAX）的形式提交。</p>
+<p>例子：</p>
+<p>以下是一个页面中删除操作的URL</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://host/path/manage?username=abc&amp;token=[random] </span><br></pre></td></tr></table></figure>
+
+<p>如果这个页面包含了一张攻击者能指定地址的图片：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;http://evil.com/notexist&quot; /&gt;</span><br></pre></td></tr></table></figure>
+
+<p>那么，当浏览器尝试加载这张图片时，会向 <code>http://evil.com</code> 服务器发送一个请求。在这个请求的HTTP头中，会包含Referer字段，其值为上面代表删除操作的URL。</p>
+<p>攻击者通过查看Referer字段的内容，即可获取到包含敏感Token的URL，从而导致Token泄露。</p>
+<blockquote>
+<p>url中不是已经泄露了token嘛，为什么还要靠referer字段来获取token?</p>
+<p>因为url中的token只有用户自己能看到，而后面的图片加载将url写入referer，让攻击者可以接收到对应操作中的token </p>
+</blockquote>
+</li>
+<li><p>还有其他的可能导致token泄露的方法，如XSS、跨域漏洞等</p>
+<blockquote>
+<p>CSRF的Token仅仅用于对抗CSRF攻击，当网站还同时存在XSS漏洞时，这个方案就会变得无效，因为XSS可以模拟客户端浏览器执行任意操作。 </p>
+<p>在XSS攻击下，攻击者完全可以请求页面后，读出页面内容里的Token值，然后再构造出一个合法的请求。 这个过程可以称之为XSRF，和CSRF以示区分。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://isoda.top">isoda</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://isoda.top/posts/3f8b.html">https://isoda.top/posts/3f8b.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://isoda.top" target="_blank">isoda's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%84%9A%E6%9C%AC%E5%AE%89%E5%85%A8/">客户端脚本安全</a><a class="post-meta__tags" href="/tags/CSRF%E6%94%BB%E5%87%BB/">CSRF攻击</a></div><div class="post_share"><div class="social-share" data-image="https://isodatop.oss-cn-beijing.aliyuncs.com/img/csrf-tokens-dark.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://isodatop.oss-cn-beijing.aliyuncs.com/img/QQ%E6%88%AA%E5%9B%BE20231208115838.png" target="_blank"><img class="post-qr-code-img" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/QQ%E6%88%AA%E5%9B%BE20231208115838.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/547c.html" title="『点击劫持』ClickJacking"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/499faf46561c4b928187338aa23c6ac8.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">『点击劫持』ClickJacking</div></div></a></div><div class="next-post pull-right"><a href="/posts/ceb6.html" title="『跨站脚本攻击』CSRF攻击"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/R.7bed854de434dd65014dc58603b8acfc" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">『跨站脚本攻击』CSRF攻击</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/77ff.html" title="『浏览器安全』浏览器同源策略与沙箱"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/R.f54d1cf1d1e34b8bca603a4f94de3b88" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-06</div><div class="title">『浏览器安全』浏览器同源策略与沙箱</div></div></a></div><div><a href="/posts/547c.html" title="『点击劫持』ClickJacking"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/499faf46561c4b928187338aa23c6ac8.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-11</div><div class="title">『点击劫持』ClickJacking</div></div></a></div><div><a href="/posts/a4a5.html" title="『跨站脚本攻击』XSS攻击进阶——XSS payload"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/R.7bed854de434dd65014dc58603b8acfc" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-07</div><div class="title">『跨站脚本攻击』XSS攻击进阶——XSS payload</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">isoda</div><div class="author-info__description">简单 自律 高效</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">30</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/soda-VV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/soda-VV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:673828733@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">这里是isoda的个人博客，在这里分享我的学习与生活，致力于毕业当公务员摆烂，有问题欢迎探讨交流</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E4%B8%8E%E5%8E%9F%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">定义与原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CSRF%E8%BF%9B%E9%98%B6"><span class="toc-number">2.</span> <span class="toc-text">CSRF进阶</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84Cookie%E7%AD%96%E7%95%A5"><span class="toc-number">2.1.</span> <span class="toc-text">浏览器的Cookie策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#P3P%E5%A4%B4%E7%9A%84%E5%89%AF%E4%BD%9C%E7%94%A8"><span class="toc-number">2.2.</span> <span class="toc-text">P3P头的副作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GET%E5%92%8CPOST"><span class="toc-number">2.3.</span> <span class="toc-text">GET和POST</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSRF-worm"><span class="toc-number">2.4.</span> <span class="toc-text">CSRF worm</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CSRF%E9%98%B2%E5%BE%A1"><span class="toc-number">3.</span> <span class="toc-text">CSRF防御</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="toc-number">3.1.</span> <span class="toc-text">验证码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Referer-Check"><span class="toc-number">3.2.</span> <span class="toc-text">Referer Check</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Anti-CSRF-Token"><span class="toc-number">3.3.</span> <span class="toc-text">Anti CSRF Token</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/a395.html" title="『注入攻击』Injection"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/3908b96858be3a17bc39c6f3254d5a1100d2d71a.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『注入攻击』Injection"/></a><div class="content"><a class="title" href="/posts/a395.html" title="『注入攻击』Injection">『注入攻击』Injection</a><time datetime="2024-09-15T07:40:24.000Z" title="发表于 2024-09-15 15:40:24">2024-09-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/4981.html" title="『文件上传漏洞』File Upload Vulnerabilities"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/9a3eaa168ddeaaaaa656d430d0ae4678.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『文件上传漏洞』File Upload Vulnerabilities"/></a><div class="content"><a class="title" href="/posts/4981.html" title="『文件上传漏洞』File Upload Vulnerabilities">『文件上传漏洞』File Upload Vulnerabilities</a><time datetime="2024-09-01T02:35:44.000Z" title="发表于 2024-09-01 10:35:44">2024-09-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/9dd6.html" title="『Docker』Docker基础知识"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/docker.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『Docker』Docker基础知识"/></a><div class="content"><a class="title" href="/posts/9dd6.html" title="『Docker』Docker基础知识">『Docker』Docker基础知识</a><time datetime="2024-08-15T01:30:13.000Z" title="发表于 2024-08-15 09:30:13">2024-08-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/c2a6.html" title="『Java内存马』RASP检测Java内存马"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20241206104623582.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『Java内存马』RASP检测Java内存马"/></a><div class="content"><a class="title" href="/posts/c2a6.html" title="『Java内存马』RASP检测Java内存马">『Java内存马』RASP检测Java内存马</a><time datetime="2024-08-01T00:25:43.000Z" title="发表于 2024-08-01 08:25:43">2024-08-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/64ed.html" title="『web前端开发』React快速入门"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20241206154646938.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『web前端开发』React快速入门"/></a><div class="content"><a class="title" href="/posts/64ed.html" title="『web前端开发』React快速入门">『web前端开发』React快速入门</a><time datetime="2024-07-25T00:23:14.000Z" title="发表于 2024-07-25 08:23:14">2024-07-25</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/csrf-tokens-dark.png')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2025 By isoda</div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
