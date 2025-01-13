@@ -1,0 +1,575 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>『渗透测试』信息收集（二）设备平台 | isoda's Blog</title><meta name="author" content="isoda,673828733@qq.com"><meta name="copyright" content="isoda"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="介绍渗透测试的信息收集阶段，其中可能遇到的设备平台问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="『渗透测试』信息收集（二）设备平台">
+<meta property="og:url" content="https://isoda.top/posts/c0ec.html">
+<meta property="og:site_name" content="isoda&#39;s Blog">
+<meta property="og:description" content="介绍渗透测试的信息收集阶段，其中可能遇到的设备平台问题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://isodatop.oss-cn-beijing.aliyuncs.com/img/titel-cas-cybersecurity.png">
+<meta property="article:published_time" content="2024-10-20T01:20:13.000Z">
+<meta property="article:modified_time" content="2025-01-13T09:39:40.030Z">
+<meta property="article:author" content="isoda">
+<meta property="article:tag" content="信息收集">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://isodatop.oss-cn-beijing.aliyuncs.com/img/titel-cas-cybersecurity.png"><link rel="shortcut icon" href="https://isodatop.oss-cn-beijing.aliyuncs.com/img/SY7%7DZ%7B%28%28%7DTKN%29MJQGMMXJJ2.png"><link rel="canonical" href="https://isoda.top/posts/c0ec.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文距离发布日期已经过去了：","messageNext":"天，部分资源可能已经不存在了，详情可以咨询作者"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体中文","cht_to_chs":"你已切换为简体中文","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#9400D3","bgDark":"#C0C0C0","position":"top-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '『渗透测试』信息收集（二）设备平台',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-01-13 17:39:40'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">32</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/titel-cas-cybersecurity.png')"><nav id="nav"><span id="blog-info"><a href="/" title="isoda's Blog"><span class="site-name">isoda's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">『渗透测试』信息收集（二）设备平台</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-10-20T01:20:13.000Z" title="发表于 2024-10-20 09:20:13">2024-10-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-01-13T09:39:40.030Z" title="更新于 2025-01-13 17:39:40">2025-01-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="『渗透测试』信息收集（二）设备平台"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>本文主要介绍渗透测试的信息收集阶段中，可能遇到的WAF、蜜罐和CDN这三种设备平台的相关知识</p>
+<h1 id="waf"><a class="markdownIt-Anchor" href="#waf"></a> WAF</h1>
+<h2 id="基本概念"><a class="markdownIt-Anchor" href="#基本概念"></a> 基本概念</h2>
+<ol>
+<li>
+<p><strong>什么是WAF</strong>：WAF的全称是（Web Application Firewall），即<strong>Web应用防火墙</strong>。WAF是通过执行一系列针对HTTP/HTTPS的安全策略来专门为Web应用提供保护的一款产品，提供web应用层防护安全能力。</p>
+<blockquote>
+<p>WAF只保护web应用，如果目标服务器上还开放了其他的服务，WAF并不会对其进行保护</p>
+</blockquote>
+</li>
+<li>
+<p><strong>原理</strong>：WAF主要是通过<strong>内置的很多安全规则</strong> 来进行防御。</p>
+<ul>
+<li>可防护常见的SQL注入、XSS、网页篡改、中间件漏洞等OWASP TOP10攻击行。</li>
+<li>当发现攻击后，可将IP进行锁定，IP锁定之后将无法访问网站业务。</li>
+<li>也支持防止CC攻击，采用集中度和速率双重检测算法。</li>
+</ul>
+</li>
+<li>
+<p><strong>WAF的分类与其部署方式</strong></p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/3ee71cd998dab5d7953eb7d1e5337123.png" alt="3ee71cd998dab5d7953eb7d1e5337123" /></p>
+<p>目前使用非嵌入型WAF比较多，中小型公司使用软件型WAF，zf、jg、学校一般使用硬件型WAF，大型公司使用云WAF（防护能力最强）</p>
+</li>
+</ol>
+<h2 id="waf识别"><a class="markdownIt-Anchor" href="#waf识别"></a> WAF识别</h2>
+<ol>
+<li>
+<p><strong>wafwoof</strong></p>
+<p>kali中执行下面的命令进行WAF扫描（注意是0不是O）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># wafw00f ip/域名</span></span><br><span class="line">wafw00f www.isoda.top</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>identYwaf</strong></p>
+<p>地址：<a target="_blank" rel="noopener" href="https://github.com/stamparm/identywaf">https://github.com/stamparm/identywaf</a></p>
+<p>与wafwoof相比运行速度慢，比较稳定推荐还是使用这一款工具。</p>
+<blockquote>
+<p>这两个工具的原理都是：发送一系列定制的HTTP请求，捕获响应中的特定模式并匹配特征库进行识别（如被拦截的错误页面图片模板）</p>
+</blockquote>
+</li>
+<li>
+<p><strong>网站请求信息中暴露</strong></p>
+<p>网站请求数据包中的 <code>X-Powered-By</code> 字段暴露WAF相关信息</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20241224113646275.png" alt="image-20241224113646275" /></p>
+</li>
+<li>
+<p><strong>nmap指纹检测</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># nmap -p 80,443 --script=http-waf-detect 目标主机</span></span><br><span class="line">nmap -p 80,443 --script=http-waf-detect www.isoda.top</span><br><span class="line"><span class="comment"># nmap -p 80,443 --script=http-waf-fingerprint 目标主机（精度更高）</span></span><br><span class="line">nmap -p 80,443 --script=http-waf-fingerprint www.isoda.top</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="识别waf对于安全测试的意义"><a class="markdownIt-Anchor" href="#识别waf对于安全测试的意义"></a> 识别WAF对于安全测试的意义</h2>
+<p>在开始测试之前检测是否存在WAF，如果存在的是软件WAF可以尝试绕过。如果是其他WAF的话大部分都是没办法绕过的，只能考虑从web应用以外的方向攻击，或者直接放弃测试。</p>
+<ul>
+<li>一个网站要是使用了waf，而渗透人员没有识别直接使用工具进行扫描，有可能会导致waf将你的ip地址拉入黑名单而不能访问。</li>
+<li>不同waf可能存在着不同的绕过思路，可以有针对性行的绕过各个厂商的waf。</li>
+</ul>
+<h1 id="蜜罐"><a class="markdownIt-Anchor" href="#蜜罐"></a> 蜜罐</h1>
+<h2 id="基本概念-2"><a class="markdownIt-Anchor" href="#基本概念-2"></a> 基本概念</h2>
+<ol>
+<li>
+<p><strong>什么是蜜罐</strong></p>
+<p>蜜罐（Honeypot）是一种网络安全机制，用于吸引、检测、分析和防御网络攻击。它通常被设计成一个看似真实但实际上是受控的系统或环境，诱使攻击者对其进行攻击，从而保护真正的系统并收集有关攻击行为的信息。</p>
+</li>
+<li>
+<p><strong>蜜罐在红蓝对抗中扮演的角色</strong></p>
+<ul>
+<li>红队：通过<mark>识别蜜罐</mark>来发现和规避蜜罐</li>
+<li>蓝队：<mark>部署蜜罐</mark>来保护真正的系统，通过分析蜜罐的被攻击记录推测攻击者的意图和攻击手法等信息</li>
+</ul>
+</li>
+<li>
+<p><strong>蜜罐的分类</strong></p>
+<p>1）根据蜜罐与攻击者之间进行的交互的程度分类</p>
+<ul>
+<li>低交互蜜罐</li>
+<li>中交互蜜罐</li>
+<li>高交互蜜罐</li>
+</ul>
+<p>2）根据蜜罐模拟的目标分类</p>
+<ul>
+<li>数据库蜜罐</li>
+<li>工控蜜罐：模拟ICS设备，如SCADA、PLC</li>
+<li>物联网蜜罐：模拟IOT设备，如路由器、智能摄像头</li>
+<li>Web蜜罐</li>
+<li>…</li>
+</ul>
+</li>
+<li>
+<p><strong>开源蜜罐项目</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://hfish.net/#/">https://hfish.net/#/</a></li>
+</ul>
+</li>
+</ol>
+<h2 id="蜜罐识别"><a class="markdownIt-Anchor" href="#蜜罐识别"></a> 蜜罐识别</h2>
+<ol>
+<li>
+<p><strong>蜜罐识别技术的原理</strong></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/jPz9hBmUypFyQlU27vglUg">谁是鱼谁是饵？红队视角下蜜罐识别方式汇总</a></p>
+</li>
+<li>
+<p><strong>人工分析方法</strong></p>
+<p>人工审查目标服务器IP，如果是蜜罐的话可能存在以下的特征：</p>
+<p><strong>1）端口多而有规律性</strong>：蜜罐通常开放多个端口，以模拟真实服务器的服务。这些端口可能包括常见的 HTTP、SSH、MySQL 等服务端口。可能开放多个端口运行http服务，端口号连续且比较大。</p>
+<p><strong>2）蜜罐设计导致真实应用解析问题</strong>：例如目标服务器存在开放端口3306（ 一般运行MySQL服务）</p>
+<ul>
+<li>
+<p>如果这个服务器不是蜜罐：如果你在浏览器中访问 <code>http://目标IP:3306</code>，通常会提示“连接被拒绝”或“无法建立连接”。因为 MySQL 是基于特定数据库协议的，而浏览器主要支持 HTTP/HTTPS 协议，因此MySQL 服务器并不支持 HTTP，从而拒绝连接。</p>
+</li>
+<li>
+<p>如果这个服务器是蜜罐：如果你在浏览器中访问 <code>http://目标IP:3306</code>，通常不是返回常见的 HTML 页面，而是立即提示或开始下载JSON或HTML文件。</p>
+<p>蜜罐会捕获攻击者尝试暴力破解 SSH、MySQL 等服务的用户名和密码，记录的账号密码通过 Web 功能（如 JSONP）传输到蜜罐运维方的实时监控后台。因为这里使用到了jsonp等web功能，浏览器访问的时候就会使用web协议来解析，从而导致了下载（蜜罐的设计理念所导致的问题）。</p>
+</li>
+</ul>
+<blockquote>
+<p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42746827/article/details/109652508">基于Hfish的蜜罐分析和JSONP利用</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/network/373478.html">攻防演练之蜜罐获取个人信息方式研究</a></li>
+</ul>
+<p>假设百度某个接口存在jsonp漏洞，防守方可在web蜜罐页面上，加载一个js，由于js请求可跨域，<a target="_blank" rel="noopener" href="http://xn--jsonpxx-zx2l59azj431as5mgk0d1xfgm5a.baidu.com/xx%E5%8F%91%E8%AF%B7%E6%B1%82%E3%80%82">即可向存在jsonp漏洞的xx.baidu.com/xx发请求。</a><br />
+如果访问者存在baidu.com的登录态，那么这个请求是能自动带上baidu.com的cookie的，响应中会有回调函数以及json格式封装的数据。</p>
+</blockquote>
+<p><strong>3）蜜罐设备指纹分析</strong></p>
+<p>记录维护常见的蜜罐设备指纹信息</p>
+</li>
+<li>
+<p><strong>工具</strong></p>
+<ul>
+<li>
+<p>Heimdallr：chrome浏览器插件</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://github.com/360quake/quake_rs">https://github.com/360quake/quake_rs</a> 需要会员</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">quake.exe honeypot 目标IP</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="cdn"><a class="markdownIt-Anchor" href="#cdn"></a> CDN</h1>
+<h2 id="基本概念-3"><a class="markdownIt-Anchor" href="#基本概念-3"></a> 基本概念</h2>
+<ol>
+<li>
+<p><strong>原理</strong></p>
+<p>CDN的全称是Content Delivery Network，即内容分发网络。CDN是构建在现有网络基础之上的智能虚拟网络，依靠部署在各地的边缘服务器，通过中心平台的负载均衡、内容分发、调度等功能模块，使用户就近获取所需内容，降低网络拥塞，提高用户访问响应速度和命中率。但在安全测试过程中，若目标存在CDN服务，将会影响到后续的安全测试过程。</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/u6pjybbkxn.png" alt="img" /></p>
+</li>
+<li>
+<p><strong>CDN对于安全测试有那些影响?</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.传统访问：用户访问域名–&gt;解析服务器IP–&gt;访问目标主机</span><br><span class="line">2.普通CDN：用户访问域名–&gt;CDN节点–&gt;真实服务器IP–&gt;访问目标主机</span><br><span class="line">3.带WAF的CDN：用户访问域名–&gt;CDN节点（WAF）–&gt;真实服务器IP–&gt;访问目标主机</span><br></pre></td></tr></table></figure>
+<ul>
+<li>CDN会隐藏服务器真实的ip地址，<mark>无法对目标网站的操作系统进行渗透</mark></li>
+<li>但CDN站点又可以理解为是目标站点的镜像站点（大多数都是静态CDN加速），拥有相同的网站架构，且CDN服务器可与站点服务器进行交互，因此<mark>sql注入，xss等漏洞的挖掘并不受太大影响</mark>。</li>
+</ul>
+</li>
+<li>
+<p><strong>常见的CDN服务提供商</strong></p>
+<p>1）国内：阿里云 百度云 七牛云 又拍云 腾讯云 Ucloud 360 网宿科技 ChinaCache</p>
+<p>2）国外：CloudFlare StackPath Fastly Akamai CloudFront Edgecast CDNetworks Google Cloud CDN CacheFly Keycdn Udomain CDN77</p>
+</li>
+</ol>
+<h2 id="如何判断目标存在cdn服务"><a class="markdownIt-Anchor" href="#如何判断目标存在cdn服务"></a> 如何判断目标存在CDN服务?</h2>
+<ol>
+<li>
+<p><strong>多节点请求技术</strong></p>
+<p>如果ping的结果只有一个那么就没有CDN、要是不止一个则可以判断为有CDN</p>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="http://ping.chinaz.com/">http://ping.chinaz.com/</a></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="http://ping.aizhan.com/">http://ping.aizhan.com/</a></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="http://ce.cloud.360.cn/">http://ce.cloud.360.cn/</a></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>nslookup查询域名解析信息</strong></p>
+<p>如果查询结果中adress存在不止一个，表示使用了CDN</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nslookup www.baidu.com</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="cdn绕过"><a class="markdownIt-Anchor" href="#cdn绕过"></a> CDN绕过</h2>
+<h3 id="子域名查询"><a class="markdownIt-Anchor" href="#子域名查询"></a> <strong>子域名查询</strong></h3>
+<ol>
+<li>
+<p><strong>原理</strong></p>
+<p>假设存在主站 www.isoda.top（192.168.1.100） 和子站 bbs.isoda.top ，两个网站可能存在三种关系：</p>
+<ul>
+<li>
+<p>子站ip也是 192.168.1.100：由同一台服务器托管，或使用了同一个CDN</p>
+</li>
+<li>
+<p>子站ip在同一个网段上，ip为192.168.1.1-254：处于同一数据中心或服务提供商的机房中，或者是运行在同一局域网内的不同服务器上</p>
+</li>
+<li>
+<p>子站ip在不同网段上：没有关系，一般不考虑</p>
+</li>
+</ul>
+<p>一般主站的流量要比子站大得多，所以很多站长只会对主站或者流量大的子站点做CDN服务。在这种情况下，可以通过子站的真实IP推算出主站的真实IP（和子站在同一台服务器或者同一个C段）。</p>
+</li>
+<li>
+<p><strong>方法</strong></p>
+<p><strong>1）获取子域名</strong></p>
+<ul>
+<li>
+<p>子域名扫描器</p>
+<ul>
+<li>layer：基于字典进行挖掘</li>
+</ul>
+</li>
+<li>
+<p>谷歌语法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 查看www以外的一子域名</span><br><span class="line">site:baidu.com -www</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>2）使用进行超级ping工具进行多节点ping，找没有用cdn解析的子站点</strong></p>
+<p>工具： <a target="_blank" rel="noopener" href="http://ping.chinaz.com/">http://ping.chinaz.com/</a></p>
+<ul>
+<li>
+<p><strong>ping 带 <code>www</code> 和不带 <code>www</code> 的网站主站域名</strong></p>
+<p>大部分网站会将带 <code>www</code> 和不带 <code>www</code> 的请求指向同一台服务器，保证两者的内容一致。但如果网站使用了 CDN 或缓存服务，而带 <code>www</code> 和不带 <code>www</code> 的域名使用了不同的解析策略，请求可能有一个指向CDN，而另一个指向的是真实IP。</p>
+<blockquote>
+<p>例如这里可以看到，我们是可以对 <code>www</code> 和 <code>*</code> 的访问进行分别配置的</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20241223111420660.png" alt="image-20241223111420660" /></p>
+</blockquote>
+</li>
+<li>
+<p><strong>ping 主站的手机端域名</strong></p>
+<p>一般是在域名前加上 <code>m.</code> ，可以访问网站对应的客户端版本</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="邮件服务查询"><a class="markdownIt-Anchor" href="#邮件服务查询"></a> 邮件服务查询</h3>
+<ol>
+<li>
+<p><strong>原理</strong></p>
+<p>一般的中大型网站都会存在邮件服务，这种服务一般都是只有内部员工访问，所以并不会使用CDN。</p>
+</li>
+<li>
+<p><strong>方法</strong></p>
+<p>我们可以尝试让网站向我们发送邮件（利用注册账号、找回密码等接口，让网站向我们的邮箱发送验证码），然后通过<strong>邮箱反查技术</strong>获取到邮件服务器的真实IP信息，邮件服务器的真实IP一般与网站IP相同或处于同一个网段。</p>
+<ul>
+<li>
+<p>直接查看邮件源代码（gmail、outlook可用），里面存在网站真实IP</p>
+<p><a target="_blank" rel="noopener" href="https://docs.pingcode.com/baike/3355565">怎么查看邮件源代码</a></p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20241223155741496.png" alt="image-20241223155741496" /></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>常见的邮件触发点</strong></p>
+<ul>
+<li>RSS订阅</li>
+<li>邮箱注册、激活处</li>
+<li><strong>邮箱找回密码处</strong></li>
+<li>产品更新的邮件推送</li>
+<li>某业务执行后发送的邮件通知</li>
+<li>员工邮箱、邮件管理平台等入口处的忘记密码</li>
+</ul>
+</li>
+</ol>
+<h3 id="国外地址请求"><a class="markdownIt-Anchor" href="#国外地址请求"></a> 国外地址请求</h3>
+<ol>
+<li>
+<p><strong>原理</strong>：国内的服务器为了节省成本，一般不会部署CDN到国外的运营商。</p>
+</li>
+<li>
+<p><strong>方法</strong>：在这种情况下，通过国外的代理直接访问网站可能可以直接获取到真实IP。</p>
+<p>但是有些比较大或离中国比较近的国家（美国、加拿大、日本等）还是可能会部署CDN，所以尽量找比较冷门的国家。</p>
+</li>
+<li>
+<p><strong>工具</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://tools.ipip.net/cdn.php">https://tools.ipip.net/cdn.php</a></li>
+</ul>
+</li>
+</ol>
+<h3 id="全网扫描"><a class="markdownIt-Anchor" href="#全网扫描"></a> 全网扫描</h3>
+<ol>
+<li>
+<p><strong>原理</strong></p>
+<p>基于网站所使用CDN厂商，去IP库中查询</p>
+<p><mark>准确率低、麻烦、时间成本大，属于没有办法的办法</mark></p>
+</li>
+<li>
+<p><strong>方法</strong></p>
+<p><strong>1）判断目标网站使用的CDN服务提供商</strong></p>
+<p>工具：<a target="_blank" rel="noopener" href="https://tools.ipip.net/cdn.php">https://tools.ipip.net/cdn.php</a></p>
+<p><strong>2）IP库筛选地址段</strong></p>
+<p>基于CDN服务提供商，在IP库中查询该服务提供商的真实IP地址范围</p>
+<p>工具：纯真IP库 <a target="_blank" rel="noopener" href="https://github.com/FW27623/qqwry">https://github.com/FW27623/qqwry</a></p>
+<p><strong>3）配置范围扫描</strong></p>
+<p>基于目标网站的一些特征（如网站的标题），扫描获取到的IP地址范围，看是否存在匹配的网站</p>
+<p>工具：</p>
+<ul>
+<li>fuckcdn <a target="_blank" rel="noopener" href="https://github.com/Tai7sy/fuckcdn">https://github.com/Tai7sy/fuckcdn</a></li>
+<li>w8 fuckcdn</li>
+<li>zmap</li>
+</ul>
+</li>
+</ol>
+<h3 id="遗留文件"><a class="markdownIt-Anchor" href="#遗留文件"></a> 遗留文件</h3>
+<ol>
+<li>
+<p><strong>原理</strong></p>
+<p>一些站点在搭建之初，会用一些文件测试站点，例如“phpinfo()”文件，此类文件里就有可能包含了真实的IP地址。</p>
+</li>
+<li>
+<p><strong>方法</strong></p>
+<p>可以利用Google语法搜索站点是否有遗留文件，里面的 <code>SERVER-ADDR</code> 字段存在IP配置信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">site:xxx.com inurl:phpinfo.php</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="dns解析历史记录"><a class="markdownIt-Anchor" href="#dns解析历史记录"></a> DNS解析历史记录</h3>
+<ol>
+<li>
+<p><strong>原理</strong>：站点在使用CDN服务之前，它的真实IP地址可能被DNS服务器所记录到，此时我们就可以通过DNS历史记录找到目标真实IP。</p>
+</li>
+<li>
+<p><strong>方法</strong>：</p>
+<p>1）获取DNS解析的历史记录可以获取真实IP</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://site.ip138.com/">https://site.ip138.com/</a></li>
+<li><a target="_blank" rel="noopener" href="https://x.threatbook.com/">https://x.threatbook.com/</a> 需要会员</li>
+<li><a target="_blank" rel="noopener" href="https://viewdns.info/">https://viewdns.info/</a> 在IP history模块查询</li>
+<li><a target="_blank" rel="noopener" href="https://tools.ipip.net/cdn.php">https://tools.ipip.net/cdn.php</a></li>
+</ul>
+</li>
+</ol>
+<h3 id="ddos攻击"><a class="markdownIt-Anchor" href="#ddos攻击"></a> DDOS攻击</h3>
+<p>CDN作为负载均衡的工具，存在流量上限，当CDN的访问量达到流量上限的时候，我们再去访问网站访问的一般就是没有使用CDN的真实IP</p>
+<h3 id="网络测绘引擎搜索特定内容"><a class="markdownIt-Anchor" href="#网络测绘引擎搜索特定内容"></a> 网络测绘引擎搜索特定内容</h3>
+<ol>
+<li>
+<p><strong>原理</strong></p>
+<p>通过关键字检索相关的ip或域名，很多时候能直接获取到网站的真实ip</p>
+</li>
+<li>
+<p><strong>常用的网络测绘引擎</strong></p>
+<ul>
+<li>shodan：<a target="_blank" rel="noopener" href="https://www.shodan.io/">https://www.shodan.io/</a></li>
+<li>钟馗之眼：<a target="_blank" rel="noopener" href="https://www.zoomeye.org/">https://www.zoomeye.org/</a></li>
+<li>fofa：<a target="_blank" rel="noopener" href="https://fofa.info/">https://fofa.info/</a></li>
+</ul>
+</li>
+<li>
+<p><strong>方法</strong></p>
+<p><strong>1）对网站的icon进行检索</strong></p>
+<p>查看网站源代码找到网站icon对应的地址</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> mmh3</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取favicon.ico</span></span><br><span class="line">response = requests.get(<span class="string">&#x27;https://i0.hdslb.com/bfs/static/jinkela/long/images/favicon.ico&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将内容编码为base64</span></span><br><span class="line">favicon_base64 = base64.b64encode(response.content).decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算hash</span></span><br><span class="line">hash_value = mmh3.<span class="built_in">hash</span>(favicon_base64)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打印结果</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;shodan语法：http.favicon.hash: &#x27;</span> + <span class="built_in">str</span>(hash_value))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;fofa语法：icon_hash=&quot;&#123;&#125;&quot;&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">str</span>(hash_value)))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>待进一步仔细阅读：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/qiudabai/p/9763739.html">https://www.cnblogs.com/qiudabai/p/9763739.html</a></p>
+<h3 id="利用主动漏洞"><a class="markdownIt-Anchor" href="#利用主动漏洞"></a> 利用主动漏洞</h3>
+<p>如果网站存在主动请求自定义网址此类的主动漏洞，可以利用漏洞让目标请求我们所控制的服务器，从而获取到网站的真实IP</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/f12c127ac5f8011328571dc14d409d4f.png" alt="f12c127ac5f8011328571dc14d409d4f" /></p>
+<h2 id="真实ip验证"><a class="markdownIt-Anchor" href="#真实ip验证"></a> 真实IP验证</h2>
+<p>想要验证我们获取到的IP是否可信，可以采用下面的方法</p>
+<ol>
+<li>
+<p><strong>第三方ip地址查询工具</strong>：不一定准确</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://get-site-ip.com/">https://get-site-ip.com/</a></li>
+</ul>
+</li>
+<li>
+<p><strong>手动验证</strong></p>
+<ul>
+<li>查询网站IP的真实地址地址，在网站主页上找备案号看是否地区一致</li>
+<li>检索网站公司相关信息，所在地等，结合社工进行验证</li>
+</ul>
+</li>
+<li>
+<p><strong>本地 DNS 劫持验证</strong></p>
+<p>原理：</p>
+<p>通过在本地修改 <code>hosts</code> 文件，将目标域名强制解析到你获取的 IP 地址，从而绕过正常的 DNS 解析流程。CDN 的一个核心功能是缓存内容，缓存需要时间同步和刷新。如果强制将域名解析到某个 IP 上，而这个 IP 是 CDN 节点，可能出现：</p>
+<ul>
+<li>内容可能不完整（因为CDN缓存和源站之间需要同步）。</li>
+<li>某些动态请求可能出现异常（例如 API 数据未返回或功能失效）。</li>
+<li>网址连接失败</li>
+</ul>
+<p>而源站直接处理请求，内容完整，刷新异常不会发生。</p>
+<p>步骤：</p>
+<p>1）清空本地 DNS 缓存</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ipconfig /flushdns       <span class="comment"># Windows</span></span><br><span class="line">sudo dscacheutil -flushcache           <span class="comment"># macOS</span></span><br></pre></td></tr></table></figure>
+<p>2）修改hosts文件</p>
+<p>修改 <code>C:\Windows\System32\drivers\etc</code> 文件中的ip域名映射，为我们获取的真实ip地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">175.12.114.176 mozhe.com</span><br><span class="line">175.12.114.176 www.mozhe.com</span><br></pre></td></tr></table></figure>
+<p>3）访问网站</p>
+<ul>
+<li>如果网站功能和内容都正常，说明连接的可能是源站。</li>
+<li>如果出现刷新异常、功能失效，或者内容不一致，则可能连接的是 CDN 节点。</li>
+</ul>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://isoda.top">isoda</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://isoda.top/posts/c0ec.html">https://isoda.top/posts/c0ec.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://isoda.top" target="_blank">isoda's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/">信息收集</a></div><div class="post_share"><div class="social-share" data-image="https://isodatop.oss-cn-beijing.aliyuncs.com/img/titel-cas-cybersecurity.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://isodatop.oss-cn-beijing.aliyuncs.com/img/QQ%E6%88%AA%E5%9B%BE20231208115838.png" target="_blank"><img class="post-qr-code-img" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/QQ%E6%88%AA%E5%9B%BE20231208115838.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/posts/9284.html" title="『web安全』web安全基础"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/v2-012e5a6aa869db4646c9f94a07191eea_1440w.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">『web安全』web安全基础</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">isoda</div><div class="author-info__description">简单 自律 高效</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">32</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/soda-VV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/soda-VV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:673828733@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">这里是isoda的个人博客，在这里分享我的学习与生活，致力于毕业当公务员摆烂，有问题欢迎探讨交流</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#waf"><span class="toc-number">1.</span> <span class="toc-text"> WAF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text"> 基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#waf%E8%AF%86%E5%88%AB"><span class="toc-number">1.2.</span> <span class="toc-text"> WAF识别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%86%E5%88%ABwaf%E5%AF%B9%E4%BA%8E%E5%AE%89%E5%85%A8%E6%B5%8B%E8%AF%95%E7%9A%84%E6%84%8F%E4%B9%89"><span class="toc-number">1.3.</span> <span class="toc-text"> 识别WAF对于安全测试的意义</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%9C%9C%E7%BD%90"><span class="toc-number">2.</span> <span class="toc-text"> 蜜罐</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-2"><span class="toc-number">2.1.</span> <span class="toc-text"> 基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%9C%9C%E7%BD%90%E8%AF%86%E5%88%AB"><span class="toc-number">2.2.</span> <span class="toc-text"> 蜜罐识别</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cdn"><span class="toc-number">3.</span> <span class="toc-text"> CDN</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-3"><span class="toc-number">3.1.</span> <span class="toc-text"> 基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E7%9B%AE%E6%A0%87%E5%AD%98%E5%9C%A8cdn%E6%9C%8D%E5%8A%A1"><span class="toc-number">3.2.</span> <span class="toc-text"> 如何判断目标存在CDN服务?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cdn%E7%BB%95%E8%BF%87"><span class="toc-number">3.3.</span> <span class="toc-text"> CDN绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90%E5%9F%9F%E5%90%8D%E6%9F%A5%E8%AF%A2"><span class="toc-number">3.3.1.</span> <span class="toc-text"> 子域名查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E6%9F%A5%E8%AF%A2"><span class="toc-number">3.3.2.</span> <span class="toc-text"> 邮件服务查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BD%E5%A4%96%E5%9C%B0%E5%9D%80%E8%AF%B7%E6%B1%82"><span class="toc-number">3.3.3.</span> <span class="toc-text"> 国外地址请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E7%BD%91%E6%89%AB%E6%8F%8F"><span class="toc-number">3.3.4.</span> <span class="toc-text"> 全网扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%81%97%E7%95%99%E6%96%87%E4%BB%B6"><span class="toc-number">3.3.5.</span> <span class="toc-text"> 遗留文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dns%E8%A7%A3%E6%9E%90%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95"><span class="toc-number">3.3.6.</span> <span class="toc-text"> DNS解析历史记录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ddos%E6%94%BB%E5%87%BB"><span class="toc-number">3.3.7.</span> <span class="toc-text"> DDOS攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%B5%8B%E7%BB%98%E5%BC%95%E6%93%8E%E6%90%9C%E7%B4%A2%E7%89%B9%E5%AE%9A%E5%86%85%E5%AE%B9"><span class="toc-number">3.3.8.</span> <span class="toc-text"> 网络测绘引擎搜索特定内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E4%B8%BB%E5%8A%A8%E6%BC%8F%E6%B4%9E"><span class="toc-number">3.3.9.</span> <span class="toc-text"> 利用主动漏洞</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%9F%E5%AE%9Eip%E9%AA%8C%E8%AF%81"><span class="toc-number">3.4.</span> <span class="toc-text"> 真实IP验证</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/c0ec.html" title="『渗透测试』信息收集（二）设备平台"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/titel-cas-cybersecurity.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『渗透测试』信息收集（二）设备平台"/></a><div class="content"><a class="title" href="/posts/c0ec.html" title="『渗透测试』信息收集（二）设备平台">『渗透测试』信息收集（二）设备平台</a><time datetime="2024-10-20T01:20:13.000Z" title="发表于 2024-10-20 09:20:13">2024-10-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/9284.html" title="『web安全』web安全基础"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/v2-012e5a6aa869db4646c9f94a07191eea_1440w.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『web安全』web安全基础"/></a><div class="content"><a class="title" href="/posts/9284.html" title="『web安全』web安全基础">『web安全』web安全基础</a><time datetime="2024-10-01T01:20:13.000Z" title="发表于 2024-10-01 09:20:13">2024-10-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/a395.html" title="『注入攻击』Injection"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/3908b96858be3a17bc39c6f3254d5a1100d2d71a.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『注入攻击』Injection"/></a><div class="content"><a class="title" href="/posts/a395.html" title="『注入攻击』Injection">『注入攻击』Injection</a><time datetime="2024-09-15T07:40:24.000Z" title="发表于 2024-09-15 15:40:24">2024-09-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/4981.html" title="『文件上传漏洞』File Upload Vulnerabilities"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/9a3eaa168ddeaaaaa656d430d0ae4678.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『文件上传漏洞』File Upload Vulnerabilities"/></a><div class="content"><a class="title" href="/posts/4981.html" title="『文件上传漏洞』File Upload Vulnerabilities">『文件上传漏洞』File Upload Vulnerabilities</a><time datetime="2024-09-01T02:35:44.000Z" title="发表于 2024-09-01 10:35:44">2024-09-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/9dd6.html" title="『Docker』Docker基础知识"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/docker.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『Docker』Docker基础知识"/></a><div class="content"><a class="title" href="/posts/9dd6.html" title="『Docker』Docker基础知识">『Docker』Docker基础知识</a><time datetime="2024-08-15T01:30:13.000Z" title="发表于 2024-08-15 09:30:13">2024-08-15</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/titel-cas-cybersecurity.png')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2025 By isoda</div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
