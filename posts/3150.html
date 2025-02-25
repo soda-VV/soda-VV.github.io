@@ -1,0 +1,352 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>『安全开发』JS安全开发（二）NodeJS | isoda's Blog</title><meta name="author" content="isoda,673828733@qq.com"><meta name="copyright" content="isoda"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="从安全的角度学习NodeJS开发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="『安全开发』JS安全开发（二）NodeJS">
+<meta property="og:url" content="https://isoda.top/posts/3150.html">
+<meta property="og:site_name" content="isoda&#39;s Blog">
+<meta property="og:description" content="从安全的角度学习NodeJS开发">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://isodatop.oss-cn-beijing.aliyuncs.com/img/f8bcd9d9c6e56b3ab946d700c3478fb9.jpeg">
+<meta property="article:published_time" content="2024-11-01T01:20:13.000Z">
+<meta property="article:modified_time" content="2025-02-25T07:31:58.906Z">
+<meta property="article:author" content="isoda">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="安全开发">
+<meta property="article:tag" content="NodeJS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://isodatop.oss-cn-beijing.aliyuncs.com/img/f8bcd9d9c6e56b3ab946d700c3478fb9.jpeg"><link rel="shortcut icon" href="https://isodatop.oss-cn-beijing.aliyuncs.com/img/SY7%7DZ%7B%28%28%7DTKN%29MJQGMMXJJ2.png"><link rel="canonical" href="https://isoda.top/posts/3150.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文距离发布日期已经过去了：","messageNext":"天，部分资源可能已经不存在了，详情可以咨询作者"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体中文","cht_to_chs":"你已切换为简体中文","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#9400D3","bgDark":"#C0C0C0","position":"top-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '『安全开发』JS安全开发（二）NodeJS',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-02-25 15:31:58'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">31</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">34</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/f8bcd9d9c6e56b3ab946d700c3478fb9.jpeg')"><nav id="nav"><span id="blog-info"><a href="/" title="isoda's Blog"><span class="site-name">isoda's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">『安全开发』JS安全开发（二）NodeJS</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-01T01:20:13.000Z" title="发表于 2024-11-01 09:20:13">2024-11-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-25T07:31:58.906Z" title="更新于 2025-02-25 15:31:58">2025-02-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91/">安全开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="『安全开发』JS安全开发（二）NodeJS"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="nodejs基本概念"><a class="markdownIt-Anchor" href="#nodejs基本概念"></a> NodeJS基本概念</h1>
+<ol>
+<li>
+<p><strong>概念</strong></p>
+<p>NodeJS是一个基于 Chrome V8 引擎的 JavaScript 运行时环境，允许开发者在服务器端运行 JavaScript。它没有浏览器的 DOM 或 BOM，而是提供了与文件系统、网络请求、进程管理等相关的 API，主要<strong>用于构建服务器端应用程序</strong>。</p>
+<blockquote>
+<p>注意：nodejs不是一门新的编程语言，nodejs是在服务端运行javascript的运行环境</p>
+</blockquote>
+</li>
+<li>
+<p><strong>使用文档</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.w3cschool.cn/nodejs/">https://www.w3cschool.cn/nodejs/</a></p>
+</li>
+<li>
+<p><strong>第三方库</strong></p>
+<ul>
+<li>express：Express是一个简洁而灵活的node.js Web应用框架</li>
+<li>body-parser：node.js中间件，用于处理 JSON, Raw, Text和URL编码的数据。</li>
+<li>cookie-parser：一个解析Cookie的工具。通过req.cookies可以取到传过来的cookie，并把它们转成对象。</li>
+<li>multer：node.js中间件，用于处理 enctype=“multipart/form-data”（设置表单的MIME编码）的表单数据。</li>
+<li>mysql：Node.js来连接MySQL专用库，并对数据库进行操作。</li>
+</ul>
+</li>
+</ol>
+<h1 id="nodejs的安装使用"><a class="markdownIt-Anchor" href="#nodejs的安装使用"></a> NodeJS的安装使用</h1>
+<ol>
+<li>
+<p><strong>安装</strong></p>
+<p>在cmd中输入 <code>node -v</code> 确定自己是否已经安装过</p>
+<p>没有安装过的话，参考：</p>
+</li>
+<li>
+<p><strong>使用方法</strong></p>
+<p>初始化项目并安装Express框架</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm init -y  <span class="comment"># 初始化 Node.js 项目，生成 package.json 文件</span></span><br><span class="line">npm install express  <span class="comment"># 安装 Express</span></span><br></pre></td></tr></table></figure>
+<p>这会在你的项目中安装 Express 库，并在 <code>node_modules</code> 目录下存放依赖。</p>
+<p>在终端中输入以下命令来运行demo：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node app.js</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 引入 Express 框架</span></span><br><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="comment">// 创建 Express 应用程序实例</span></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">express</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 处理 &#x27;/login&#x27; 路径的 GET 请求，返回简单的登录页面</span></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/login&#x27;</span>, <span class="keyword">function</span>(<span class="params">req, res</span>) &#123;</span><br><span class="line">    res.<span class="title function_">send</span>(<span class="string">&#x27;&lt;hr&gt;登录页面&lt;/hr&gt;&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 处理根路径的 GET 请求，发送名为 &#x27;sql.html&#x27; 的文件</span></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/&#x27;</span>, <span class="keyword">function</span>(<span class="params">req, res</span>) &#123;</span><br><span class="line">    <span class="comment">// res.sendFile(__dirname + &#x27;/&#x27; + &#x27;sql.html&#x27;);</span></span><br><span class="line">    res.<span class="title function_">send</span>(<span class="string">&quot;hello word&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启动服务器，监听端口 3001</span></span><br><span class="line"><span class="keyword">const</span> server = app.<span class="title function_">listen</span>(<span class="number">3001</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Web 服务器已经启动，监听端口 3001！&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="基本语法"><a class="markdownIt-Anchor" href="#基本语法"></a> 基本语法</h1>
+<h2 id="getpost请求"><a class="markdownIt-Anchor" href="#getpost请求"></a> GET/POST请求</h2>
+<p><strong><code>req.query</code></strong> ：用于处理 URL 查询字符串参数**<code>GET请求</code>**</p>
+<p><strong><code>req.body</code></strong> ：用于处理 **<code>POST 请求</code>**中的表单数据。</p>
+<h2 id="回调函数"><a class="markdownIt-Anchor" href="#回调函数"></a> 回调函数</h2>
+<ol>
+<li>
+<p><strong>如何理解回调函数</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/nodejs-callback-func.html">彻底理解 Node.js 中的回调(Callback)函数</a></p>
+</li>
+<li>
+<p><strong>用法</strong></p>
+<p>在JavaScript中，回调函数通常是作为参数传递给其他函数，然后由那个函数在适当的时机调用。这种方式使得代码更加灵活和可扩展。</p>
+<p>回调函数通常与<strong>异步操作</strong>一起使用，比如读取文件、发送网络请求或等待用户输入。由于这些操作可能需要一些时间来完成，所以通常会使用回调函数来在操作完成后执行某些任务。</p>
+</li>
+<li>
+<p><strong>基本语法</strong></p>
+</li>
+</ol>
+<p>下面的延时执行函数中的匿名函数就是回调函数，表示2秒之后执行这个匿名函数</p>
+   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(function() &#123;</span><br><span class="line">  console.log(&#x27;This is a delayed message.&#x27;);</span><br><span class="line">&#125;, 2000);  // 2秒后打印</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>
+<p><strong>如何判断目标函数是否使用了回调函数</strong></p>
+<p>回调函数并不是指函数内部必须明确命名为 <code>callback</code>。</p>
+<p>在 JavaScript 中，回调函数的核心概念是：它是作为参数传递给另一个函数，并且在该函数执行时被调用。所以，不管这个函数的名字是什么，<mark>只要它是被传递到其他函数中，并在那个函数内部执行，就可以算作回调函数</mark>。</p>
+<p>比如上面的 <code>setTimeout</code> 函数就是一个回调函数，虽然它没有显式地命名为 <code>callback</code>，因为：</p>
+<ul>
+<li>它作为参数传递给了 <code>setTimeout</code> 函数。</li>
+<li>在指定的时间延迟后，<code>setTimeout</code> 会调用这个函数。</li>
+</ul>
+</li>
+</ol>
+<h1 id="功能实现"><a class="markdownIt-Anchor" href="#功能实现"></a> 功能实现</h1>
+<h2 id="用户登录"><a class="markdownIt-Anchor" href="#用户登录"></a> 用户登录</h2>
+<ol>
+<li>
+<p><strong>功能</strong>：前端输入用户名和密码，在数据库中匹配验证</p>
+</li>
+<li>
+<p><strong>环境</strong></p>
+<p>下载解析GET/POST请求体的中间件 <code>body-parser</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i body-parser</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>代码</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 引入 Express 框架</span></span><br><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> bodyParser = <span class="built_in">require</span>(<span class="string">&#x27;body-parser&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> mysql = <span class="built_in">require</span>(<span class="string">&#x27;mysql&#x27;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建 Express 应用程序实例</span></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">express</span>();</span><br><span class="line"><span class="comment">//创建一个用于解析 URL 编码的 bodyParser 中间件实例</span></span><br><span class="line"><span class="keyword">const</span> urlencodedParser = bodyParser.<span class="title function_">urlencoded</span>(&#123; <span class="attr">extended</span>: <span class="literal">false</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 处理 &#x27;/login&#x27; 路径的 GET 请求，返回简单的登录页面</span></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/login&#x27;</span>, <span class="keyword">function</span>(<span class="params">req, res</span>) &#123;</span><br><span class="line">  <span class="comment">// 从请求中获取用户名和密码</span></span><br><span class="line">  <span class="keyword">const</span> u = req.<span class="property">query</span>.<span class="property">username</span>;</span><br><span class="line">  <span class="keyword">const</span> p = req.<span class="property">query</span>.<span class="property">password</span>;</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(u);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(p);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 检查用户名和密码是否为 admin 和 123456</span></span><br><span class="line">  <span class="keyword">if</span> (u === <span class="string">&#x27;admin&#x27;</span> &amp;&amp; p === <span class="string">&#x27;123456&#x27;</span>) &#123;</span><br><span class="line">    res.<span class="title function_">send</span>(<span class="string">&#x27;欢迎进入后台管理页面&#x27;</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    res.<span class="title function_">send</span>(<span class="string">&#x27;登录用户或密码错误&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 处理 &#x27;/login&#x27; 路径的 POST 请求，使用 bodyParser 解析表单数据</span></span><br><span class="line">app.<span class="title function_">post</span>(<span class="string">&#x27;/login&#x27;</span>, urlencodedParser, <span class="keyword">function</span>(<span class="params">req, res</span>) &#123;</span><br><span class="line">  <span class="comment">// 从请求中获取表单提交的用户名和密码</span></span><br><span class="line">  <span class="keyword">const</span> u = req.<span class="property">body</span>.<span class="property">username</span>;</span><br><span class="line">  <span class="keyword">const</span> p = req.<span class="property">body</span>.<span class="property">password</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 输出获取到的用户名和密码，用于调试</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(u);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(p);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 创建与 MySQL 数据库的连接</span></span><br><span class="line">  <span class="keyword">var</span> connection = mysql.<span class="title function_">createConnection</span>(&#123;</span><br><span class="line">    host     : <span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">    user     : <span class="string">&#x27;root&#x27;</span>,</span><br><span class="line">    password : <span class="string">&#x27;root&#x27;</span>,</span><br><span class="line">    database : <span class="string">&#x27;dome01&#x27;</span></span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 建立数据库连接</span></span><br><span class="line">  connection.<span class="title function_">connect</span>();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 构建 SQL 查询，检查数据库中是否存在匹配的用户名和密码</span></span><br><span class="line">  <span class="keyword">const</span> sql = <span class="string">&#x27;select * from admin where username=&quot;&#x27;</span>+u+<span class="string">&#x27;&quot; and password=&quot;&#x27;</span>+p+<span class="string">&#x27;&quot;&#x27;</span>;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(sql);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 执行 SQL 查询</span></span><br><span class="line">  connection.<span class="title function_">query</span>(sql, <span class="keyword">function</span>(<span class="params">error, data</span>)&#123;</span><br><span class="line">    <span class="comment">// 检查查询执行中是否存在错误</span></span><br><span class="line">    <span class="keyword">if</span>(error)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;数据库连接失败！&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 检查用户名和密码是否匹配数据库中的数据</span></span><br><span class="line">        <span class="keyword">if</span>(u == data[<span class="number">0</span>][<span class="string">&#x27;username&#x27;</span>] &amp;&amp; p == data[<span class="number">0</span>][<span class="string">&#x27;password&#x27;</span>])&#123;</span><br><span class="line">            <span class="comment">// 如果匹配，发送欢迎消息到前端</span></span><br><span class="line">            res.<span class="title function_">send</span>(<span class="string">&#x27;欢迎进入后台管理页面&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">        <span class="comment">// 捕获异常，如果没有匹配的数据或其他错误，发送错误消息到前端</span></span><br><span class="line">        res.<span class="title function_">send</span>(<span class="string">&#x27;错误&#x27;</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 处理根路径的 GET 请求，发送名为 &#x27;sql.html&#x27; 的文件</span></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/&#x27;</span>, <span class="keyword">function</span>(<span class="params">req, res</span>) &#123;</span><br><span class="line">  res.<span class="title function_">sendFile</span>(__dirname + <span class="string">&#x27;/&#x27;</span> + <span class="string">&#x27;sql.html&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启动服务器，监听端口 3001</span></span><br><span class="line"><span class="keyword">const</span> server = app.<span class="title function_">listen</span>(<span class="number">3001</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Web 服务器已经启动，监听端口 3001！&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="文件管理"><a class="markdownIt-Anchor" href="#文件管理"></a> 文件管理</h2>
+<ol>
+<li>
+<p><strong>功能</strong>：目录读取</p>
+</li>
+<li>
+<p><strong>环境</strong></p>
+<p>下载相关文件管理依赖 <code>fs</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i fs</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>代码</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 引入文件系统和 Express 框架</span></span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">express</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 处理 &#x27;/file&#x27; 路径的 GET 请求</span></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/file&#x27;</span>, <span class="keyword">function</span> (<span class="params">req, res</span>) &#123;</span><br><span class="line">    <span class="comment">// 从请求中获取目录参数</span></span><br><span class="line">    <span class="keyword">const</span> dir = req.<span class="property">query</span>.<span class="property">dir</span>;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(dir);·</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用文件管理函数，传递目录参数</span></span><br><span class="line">    <span class="title function_">filemanage</span>(dir);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启动 Express 应用监听在3000端口</span></span><br><span class="line"><span class="keyword">var</span> server = app.<span class="title function_">listen</span>(<span class="number">3000</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Web应用已启动在3000端口！&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 文件管理函数，接收一个目录参数</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">filemanage</span>(<span class="params">dir</span>) &#123;</span><br><span class="line">    <span class="comment">// 使用 fs.readdir 读取目录下的文件</span></span><br><span class="line">    fs.<span class="title function_">readdir</span>(dir, <span class="keyword">function</span> (<span class="params">error, files</span>) &#123;</span><br><span class="line">        <span class="comment">// 打印目录中的文件列表</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(files);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用文件管理函数，传递目录参数</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://127.0.0.1:3000/file?dir=./">http://127.0.0.1:3000/file?dir=./</a></li>
+<li><a target="_blank" rel="noopener" href="http://127.0.0.1:3000/file?dir=../">http://127.0.0.1:3000/file?dir=…/</a></li>
+</ul>
+</li>
+</ol>
+<h2 id="命令执行"><a class="markdownIt-Anchor" href="#命令执行"></a> 命令执行</h2>
+<ol>
+<li>
+<p><strong>功能</strong>：执行系统命令、将字符串当作代码解析</p>
+</li>
+<li>
+<p><strong>环境</strong></p>
+<p>下载子进程管理模块 <code>child_process</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i child_process</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>代码</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 引入child_process模块</span></span><br><span class="line"><span class="keyword">const</span> rce = <span class="built_in">require</span>(<span class="string">&#x27;child_process&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用exec方法调用系统命令&#x27;notepad&#x27;，打开记事本</span></span><br><span class="line">rce.<span class="title function_">exec</span>(<span class="string">&#x27;notepad&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用spawnSync方法调用系统命令&#x27;calc&#x27;，打开计算器</span></span><br><span class="line">rce.<span class="title function_">spawnSync</span>(<span class="string">&#x27;calc&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用eval调用代码命令执行，将字符串当做代码解析</span></span><br><span class="line"><span class="comment">// 请注意：避免在生产环境中使用eval，可能存在安全风险</span></span><br><span class="line"><span class="built_in">eval</span>(<span class="string">&#x27;require(&quot;child_process&quot;).exec(&quot;calc&quot;);&#x27;</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="原型链污染"><a class="markdownIt-Anchor" href="#原型链污染"></a> 原型链污染</h1>
+<h2 id="什么是原型链"><a class="markdownIt-Anchor" href="#什么是原型链"></a> 什么是原型链</h2>
+<p>因为 JavaScript 没有类似 Java 中的 Class 概念，所以继承都是由原型链来实现的。JavaScript 中每个对象都有一个内部属性 <code>[[Prototype]]</code>，这个属性指向另一个对象。通过这个原型对象，当前对象可以继承其上定义的属性和方法。</p>
+<ol>
+<li>
+<p><mark>每个对象都有一个原型</mark>：当你创建一个对象时，它会有一个指向其构造函数的原型对象。</p>
+</li>
+<li>
+<p><mark>查找过程</mark>：当你访问一个对象的属性时，JavaScript 引擎<u>首先会检查这个对象自身是否有该属性</u>。如果没有，它会通过原型链查找，依次查找对象的原型及其原型的原型，直到找到该属性或者原型链的尽头（通常是 <code>null</code>）为止。</p>
+</li>
+<li>
+<p>例子</p>
+<p>下面的代码中，<code>foo.bar</code> 输出为1而不是x，因为引擎会首先检查该对象自身是否有该属性。zoo作为继承自Object的对象，同样也继承了其bar值，为x。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">let foo = &#123;bar:1&#125;</span><br><span class="line">console.log(foo.bar)    // 输出为1</span><br><span class="line"></span><br><span class="line">foo.__proto__.bar = &#x27;x&#x27;     // 修改原型</span><br><span class="line">console.log(foo.bar)    // 输出为 1，因为查找顺序的原因</span><br><span class="line"></span><br><span class="line">let zoo = &#123;&#125;</span><br><span class="line">console.log(zoo.bar)    // 输出为 &#x27;x&#x27;，因为zoo的原型指向foo.__proto__，即最底层的对象Object</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>原型链结构图</strong></p>
+<p><code>Object.prototype</code> 是 JavaScript 中所有对象的原型对象，它是 <strong>所有对象的原型链</strong> 的终极基类。几乎在 JavaScript 中创建的所有对象，都会继承 <code>Object.prototype</code> 中的方法和属性。如果你访问一个对象的某个属性或方法时，JavaScript 会沿着原型链从当前对象开始查找，直到它找到 <code>Object.prototype</code> 为止。如果 <code>Object.prototype</code> 中没有该属性或方法，JavaScript 会返回 <code>undefined</code>。</p>
+<p>以下面的图为例：<code>person.__proto__</code> 是与 <code>Person.prototype</code> 等价的，而 <code>Person.prototype.__proto__</code> 是指向 <code>Object.prototype</code> 的，再往下 <code>Object.prototype.__proto__</code> 指向 <code>null</code>。</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250224210756528.png" alt="image-20250224210756528" /></p>
+</li>
+</ol>
+<h2 id="原型链污染的原理"><a class="markdownIt-Anchor" href="#原型链污染的原理"></a> 原型链污染的原理</h2>
+<p>在 JavaScript 中，对象通过原型链继承属性和方法。如果攻击者能够通过某些方式修改对象的原型（即 <code>prototype</code>），构造函数和原型属性，就可能导致整个对象模型的行为发生异常。同时，所有继承了被污染原型的对象都会受到影响。原型链污染通常会导致拒绝服务、篡改程序执行流程、导致远程执行代码等漏洞。</p>
+<h2 id="原型链污染的利用"><a class="markdownIt-Anchor" href="#原型链污染的利用"></a> 原型链污染的利用</h2>
+<p>原型链污染配合RCE：</p>
+<p>有原型链污染的前提之下，我们可以控制基类的成员，赋值为一串恶意代码，从而造成代码注入。</p>
+<p>例如下面的代码：通过原型链bar属性执行命令打开计算器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// 创建一个包含属性 bar 的对象 foo，并将 bar 设置为 1</span><br><span class="line">let foo = &#123;bar: 1&#125;;</span><br><span class="line"></span><br><span class="line">// 输出 foo 对象的 bar 属性，预期输出为 1</span><br><span class="line">console.log(foo.bar); // 输出: 1</span><br><span class="line"></span><br><span class="line">// 修改 foo 对象的原型链上的 bar 属性，将其设置为执行命令 &#x27;require(\&#x27;child_process\&#x27;).execSync(\&#x27;calc\&#x27;);&#x27;，从而调用计算器</span><br><span class="line">foo.__proto__.bar = &#x27;require(\&#x27;child_process\&#x27;).execSync(\&#x27;calc\&#x27;);&#x27;;</span><br><span class="line"></span><br><span class="line">// 输出 foo 对象的 bar 属性，预期输出仍为 1，因为直接属性优先于原型链上的属性</span><br><span class="line">console.log(foo.bar); // 输出: 1</span><br><span class="line"></span><br><span class="line">// 创建一个空对象 zoo</span><br><span class="line">let zoo = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">// 使用 eval 执行 zoo 对象的 bar 属性，由于 zoo 对象没有 bar 属性，会导致 ReferenceError</span><br><span class="line">//调用计算机</span><br><span class="line">console.log(eval(zoo.bar));</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="实际案例"><a class="markdownIt-Anchor" href="#实际案例"></a> 实际案例</h2>
+<p>因为原型链污染的条件苛刻，一般只在CTF比赛中作为考题出现，现实中比较少</p>
+<ol>
+<li>
+<p>CTF</p>
+<ul>
+<li>
+<p>CTFshow的Web334-344</p>
+</li>
+<li>
+<p>CTF中的nodejs考点：<a target="_blank" rel="noopener" href="https://f1veseven.github.io/2022/04/03/ctf-nodejs-zhi-yi-xie-xiao-zhi-shi/">ctf-nodejs之一些小知识</a></p>
+</li>
+</ul>
+</li>
+<li>
+<p>yapi token注入漏洞</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42353842/article/details/127960229">yapi token注入漏洞</a></p>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://isoda.top">isoda</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://isoda.top/posts/3150.html">https://isoda.top/posts/3150.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://isoda.top" target="_blank">isoda's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/javascript/">javascript</a><a class="post-meta__tags" href="/tags/%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91/">安全开发</a><a class="post-meta__tags" href="/tags/NodeJS/">NodeJS</a></div><div class="post_share"><div class="social-share" data-image="https://isodatop.oss-cn-beijing.aliyuncs.com/img/f8bcd9d9c6e56b3ab946d700c3478fb9.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://isodatop.oss-cn-beijing.aliyuncs.com/img/QQ%E6%88%AA%E5%9B%BE20231208115838.png" target="_blank"><img class="post-qr-code-img" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/QQ%E6%88%AA%E5%9B%BE20231208115838.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/cdb6.html" title="『安全开发』JS安全开发（一）原生开发"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/images.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">『安全开发』JS安全开发（一）原生开发</div></div></a></div><div class="next-post pull-right"><a href="/posts/c0ec.html" title="『渗透测试』信息收集（二）设备平台"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/titel-cas-cybersecurity.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">『渗透测试』信息收集（二）设备平台</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/ac58.html" title="『安全开发』JS安全开发（三）打包器"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/images.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-01</div><div class="title">『安全开发』JS安全开发（三）打包器</div></div></a></div><div><a href="/posts/cdb6.html" title="『安全开发』JS安全开发（一）原生开发"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/images.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-01</div><div class="title">『安全开发』JS安全开发（一）原生开发</div></div></a></div><div><a href="/posts/d00f.html" title="『web前端开发』javascript学习"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/wp2742531.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-15</div><div class="title">『web前端开发』javascript学习</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">isoda</div><div class="author-info__description">简单 自律 高效</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">31</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">34</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/soda-VV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/soda-VV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:673828733@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">这里是isoda的个人博客，在这里分享我的学习与生活，致力于毕业当公务员摆烂，有问题欢迎探讨交流</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#nodejs%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text"> NodeJS基本概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#nodejs%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text"> NodeJS的安装使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text"> 基本语法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#getpost%E8%AF%B7%E6%B1%82"><span class="toc-number">3.1.</span> <span class="toc-text"> GET&#x2F;POST请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="toc-number">3.2.</span> <span class="toc-text"> 回调函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text"> 功能实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95"><span class="toc-number">4.1.</span> <span class="toc-text"> 用户登录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86"><span class="toc-number">4.2.</span> <span class="toc-text"> 文件管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="toc-number">4.3.</span> <span class="toc-text"> 命令执行</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93"><span class="toc-number">5.</span> <span class="toc-text"> 原型链污染</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%8E%9F%E5%9E%8B%E9%93%BE"><span class="toc-number">5.1.</span> <span class="toc-text"> 什么是原型链</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">5.2.</span> <span class="toc-text"> 原型链污染的原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%E7%9A%84%E5%88%A9%E7%94%A8"><span class="toc-number">5.3.</span> <span class="toc-text"> 原型链污染的利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E6%A1%88%E4%BE%8B"><span class="toc-number">5.4.</span> <span class="toc-text"> 实际案例</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/ac58.html" title="『安全开发』JS安全开发（三）打包器"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/images.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『安全开发』JS安全开发（三）打包器"/></a><div class="content"><a class="title" href="/posts/ac58.html" title="『安全开发』JS安全开发（三）打包器">『安全开发』JS安全开发（三）打包器</a><time datetime="2024-11-01T01:20:13.000Z" title="发表于 2024-11-01 09:20:13">2024-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/cdb6.html" title="『安全开发』JS安全开发（一）原生开发"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/images.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『安全开发』JS安全开发（一）原生开发"/></a><div class="content"><a class="title" href="/posts/cdb6.html" title="『安全开发』JS安全开发（一）原生开发">『安全开发』JS安全开发（一）原生开发</a><time datetime="2024-11-01T01:20:13.000Z" title="发表于 2024-11-01 09:20:13">2024-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/3150.html" title="『安全开发』JS安全开发（二）NodeJS"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/f8bcd9d9c6e56b3ab946d700c3478fb9.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『安全开发』JS安全开发（二）NodeJS"/></a><div class="content"><a class="title" href="/posts/3150.html" title="『安全开发』JS安全开发（二）NodeJS">『安全开发』JS安全开发（二）NodeJS</a><time datetime="2024-11-01T01:20:13.000Z" title="发表于 2024-11-01 09:20:13">2024-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/c0ec.html" title="『渗透测试』信息收集（二）设备平台"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/titel-cas-cybersecurity.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『渗透测试』信息收集（二）设备平台"/></a><div class="content"><a class="title" href="/posts/c0ec.html" title="『渗透测试』信息收集（二）设备平台">『渗透测试』信息收集（二）设备平台</a><time datetime="2024-10-20T01:20:13.000Z" title="发表于 2024-10-20 09:20:13">2024-10-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/9284.html" title="『web安全』web安全基础"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/v2-012e5a6aa869db4646c9f94a07191eea_1440w.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『web安全』web安全基础"/></a><div class="content"><a class="title" href="/posts/9284.html" title="『web安全』web安全基础">『web安全』web安全基础</a><time datetime="2024-10-01T01:20:13.000Z" title="发表于 2024-10-01 09:20:13">2024-10-01</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/f8bcd9d9c6e56b3ab946d700c3478fb9.jpeg')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2025 By isoda</div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
