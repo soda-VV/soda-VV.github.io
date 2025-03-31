@@ -1,0 +1,369 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>『科研』威胁情报领域研究现状总结 | isoda's Blog</title><meta name="author" content="isoda,673828733@qq.com"><meta name="copyright" content="isoda"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="对目前威胁情报领域的关键技术和研究现状进行了总结分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="『科研』威胁情报领域研究现状总结">
+<meta property="og:url" content="https://isoda.top/posts/155a.html">
+<meta property="og:site_name" content="isoda&#39;s Blog">
+<meta property="og:description" content="对目前威胁情报领域的关键技术和研究现状进行了总结分析">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250331151415771.png">
+<meta property="article:published_time" content="2024-02-26T13:30:51.000Z">
+<meta property="article:modified_time" content="2025-03-31T07:20:20.892Z">
+<meta property="article:author" content="isoda">
+<meta property="article:tag" content="威胁情报">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250331151415771.png"><link rel="shortcut icon" href="https://isodatop.oss-cn-beijing.aliyuncs.com/img/SY7%7DZ%7B%28%28%7DTKN%29MJQGMMXJJ2.png"><link rel="canonical" href="https://isoda.top/posts/155a.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文距离发布日期已经过去了：","messageNext":"天，部分资源可能已经不存在了，详情可以咨询作者"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体中文","cht_to_chs":"你已切换为简体中文","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#9400D3","bgDark":"#C0C0C0","position":"top-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '『科研』威胁情报领域研究现状总结',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-03-31 15:20:20'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">41</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">42</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250331151415771.png')"><nav id="nav"><span id="blog-info"><a href="/" title="isoda's Blog"><span class="site-name">isoda's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">『科研』威胁情报领域研究现状总结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-02-26T13:30:51.000Z" title="发表于 2024-02-26 21:30:51">2024-02-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-31T07:20:20.892Z" title="更新于 2025-03-31 15:20:20">2025-03-31</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%A7%91%E7%A0%94/">科研</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="『科研』威胁情报领域研究现状总结"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="网络攻击信息抽取研究现状"><a class="markdownIt-Anchor" href="#网络攻击信息抽取研究现状"></a> 网络攻击信息抽取研究现状</h1>
+<p>网络安全领域的攻击情报信息抽取，包括：关系抽取、命名实体识别、事件抽取三个方面</p>
+<ul>
+<li>
+<p>CyberEntRel: Joint extraction of cyber entities and relations using deep learning</p>
+<ul>
+<li>期刊：computers &amp; security <strong>CCF-B</strong></li>
+<li>时间：2024</li>
+<li>研究背景：CTI数据的增长速度非常快，现有的技术在提取CTI信息方面逐渐变得无效化</li>
+<li>研究内容：Ahmed等人使用联合提取和关系匹配技术相结合的方法从非结构化文本中提取 CTI，提出了基于RoBERTa-BiGRU-CRF的实体关系提取模型，解决了传统流水线抽取技术的局限性</li>
+</ul>
+</li>
+<li>
+<p>Seqmask: behavior extraction over cyber threat intelligence via multi-instance learning</p>
+<ul>
+<li>期刊：The Computer Journal <strong>CCF-B</strong></li>
+<li>时间：2024</li>
+<li>研究内容：Ge等人提出了一种基于多实例学习（Multi-Instance Learning，MIL）的TTPs提取框架， 根据语义影响评估从CTI 中提取行为关键词，并通过条件概率预测 TTPs 标签。</li>
+</ul>
+</li>
+<li>
+<p>Looking Beyond IoCs: Automatically Extracting Attack Patterns from External CTI</p>
+<ul>
+<li>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/asynccode" alt="img" /></p>
+</li>
+<li>
+<p>RAID’ 23 <strong>CCF-B</strong></p>
+</li>
+<li>
+<p>时间：2023</p>
+</li>
+<li>
+<p>研究背景：传统的 CTI 主要侧重于跟踪已知的威胁指标，如 IP 地址和域名，这可能无法防御不断变化的攻击，需要对攻击模式展开研究</p>
+</li>
+<li>
+<p>研究内容：ALam等人提出了一个威胁情报知识提取框架，从APT攻击和恶意软件相关的CTI中自动提取TTP和其他相关信息，并将提取的攻击模式映射到MITRE ATT&amp;CK模式框架，通过知识图谱重构这些信息以进行进一步的预测分析。是将标准化的 ATT 和 CK 模式与其他形式的威胁情报结合起来的第一项工作。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Extracting Actionable Cyber Threat Intelligence from Twitter Stream</strong></p>
+<ul>
+<li>2023 IEEE International Conference on Intelligence and Security Informatics (ISI) <strong>CCF-A</strong></li>
+<li>时间：2023</li>
+<li>研究背景：相比于IP、domain此类IOC，恶意活动相关的技术表现形式（和TTPs的“技术”有什么区别吗？）更有利于确定威胁的优先级和系统是否已经被破坏。而此类上下文信息大多存在于实时信息共享系统中，如消息应用程序和论坛。</li>
+<li>研究内容：Purba 等人提出了一种文本挖掘方法，从Twitter流中提取网络威胁攻击的技术表现形式，并和GPT-3.5-Turbo模型计算的结果做了对比 。</li>
+</ul>
+</li>
+<li>
+<p><strong>Explainable cyber threat behavior identification based on self-adversarial topic generation</strong></p>
+<ul>
+<li>Computers &amp; Security <strong>CCF-B</strong></li>
+<li>时间：2023</li>
+<li>研究背景：
+<ul>
+<li>如何构建一个便捷、高效的分析框架，从 CTI 中识别、定位和证明 TTP 行为，是目前 TTP 分类面临的挑战。</li>
+<li>传统的端到端网络威胁行为识别方法通常缺乏可解释性，难以理解其决策过程。</li>
+</ul>
+</li>
+<li>研究内容：Ge等人提出了一种基于自对抗主题生成的端到端 TTPs 分类框架，在提升准确性的同时具有较高的可解释性。</li>
+</ul>
+</li>
+<li>
+<p>DKaaS: DARK-KERNEL as a service for active cyber threat intelligence</p>
+<ul>
+<li>Computers &amp; Security <strong>CCF-B</strong></li>
+<li>时间：2023</li>
+<li>研究内容：Charan等人提出了一种主动监控暗网收集威胁情报的方法，大量收集暗网流量并 对捕获的数据进行了全面分析。</li>
+</ul>
+</li>
+</ul>
+<h1 id="安全领域知识融合研究现状"><a class="markdownIt-Anchor" href="#安全领域知识融合研究现状"></a> <strong>安全领域知识融合研究现状</strong></h1>
+<p>（1）<strong>构建网络安全知识图谱</strong></p>
+<ul>
+<li>CSKG4APT: A Cybersecurity Knowledge Graph for Advanced Persistent Threat Organization Attribution
+<ul>
+<li>TKDE <strong>CCF-A</strong></li>
+<li>时间：2022</li>
+<li>Ren等人2022年收集分析开源威胁情报中的APT组织信息，提取相关威胁信息实体，结合战术集、武器集和资产集构建了一个面向APT组织归因的安全知识图谱模型，包含了12种节点类型和7种逻辑关系。</li>
+</ul>
+</li>
+<li>Edge propagation for link prediction in requirement-cyber threat intelligence knowledge graph
+<ul>
+<li>Information Sciences <strong>CCF-B SCI</strong></li>
+<li>2024</li>
+<li>研究内容：Zhang等人将网络安全威胁情报与关键基础设施的管理安全需求数据相结合，构建异构网络安全需求知识图谱，可以有效识别网络安全事件中的管理漏洞。</li>
+<li>提出了一种基于GNN的链接预测算法，实现了CTI和SR实体之间97%的连接率，可以有效地发现管理漏洞，提高关键信息基础设施的安全能力。</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<p><strong>（2）通用领域的知识融合与实体对齐</strong></p>
+<ul>
+<li>Heterogeneous Knowledge Fusion: A Novel Approach for Personalized Recommendation via LLM
+<ul>
+<li>RecSys '23: Proceedings of the 17th ACM Conference on Recommender Systems <strong>CCF-B</strong></li>
+<li>时间：2023</li>
+<li>研究内容：Yin等人提出了一种基于大语言模型的知识融合方法，采用大模型从用户的异构行为信息中提取并融合异构知识，解决了传统方法导致的特征稀疏和知识碎片问题。</li>
+</ul>
+</li>
+<li>HiPrompt: Few-Shot Biomedical Knowledge Fusion via Hierarchy-Oriented Prompting
+<ul>
+<li>In Proceedings of the 46th International ACM SIGIR Conference on Research and Development in Information Retrieval (Short-Paper Track), 2023 <strong>CCF-A</strong></li>
+<li>时间：2023</li>
+<li>研究内容：Lu等人提出了一种监督有效的知识融合框架，通过面向层次的提示引发大语言模型的少样本推理能力，解决了生物医学知识融合任务中缺乏监督数据的问题。</li>
+</ul>
+</li>
+<li>SCMEA: A stacked co-enhanced model for entity alignment based on multi-aspect information fusion and bidirectional contrastive learning
+<ul>
+<li>2024</li>
+<li>研究背景：大多数现有方法并没有尽可能地挖掘知识图中的隐藏信息。</li>
+<li>研究内容：本文提出了SCMEA，一种基于多方面信息融合和双向对比学习的新型跨语言实体对齐框架。SCMEA最初采用多样化的表示学习模型来嵌入实体的多方面信息，并通过自适应加权机制将它们整合到统一的嵌入空间中，以克服信息缺失和不同方面信息不统一的问题。然后，我们提出了一种堆叠关系实体协同增强模型，以进一步改进实体的表示，其中关系表示是使用具有全局实体注意力的实体收集器来建模的。最后，引入基于改进的双向对比学习的组合损失函数来优化模型参数和实体表示，有效缓解中心问题并加速模型收敛。我们进行了大量的实验来评估 SCMEA 的对齐性能。在五个跨语言数据集上进行的总体实验结果、消融研究和分析表明，我们的模型实现了不同程度的性能改进，并验证了模型的有效性和鲁棒性。</li>
+<li>研究内容：zhou等人提出了一种基于多视角信息融合和双向对比学习的跨语言实体对齐框架，实现了对知识图中隐藏信息的挖掘。</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<h1 id="攻击情报可靠性研判现状"><a class="markdownIt-Anchor" href="#攻击情报可靠性研判现状"></a> <strong>攻击情报可靠性研判现状</strong></h1>
+<p>威胁情报、网络安全线索/事件的真假，质量评估</p>
+<p><strong>（1）国内外目前针对攻击情报源的质量评估、攻击情报的可靠性</strong></p>
+<ul>
+<li>Correlation of cyber threat intelligence with sightings for intelligence assessment and augmentation
+<ul>
+<li>Computer Networks <strong>CCF-B</strong></li>
+<li>2023</li>
+<li>研究背景：很少有研究评估 CTI 与现实环境中的观察结果（即目击事件）之间的一致性。</li>
+<li>研究内容：Lin等人在2023年对CTI与现实环境中的观察结果之间的一致性展开了研究，提出了一种基于目击观测来评估和增强 CTI 的综合方法，填补了CTI 的评估和增强方面的空白。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>2023年找不到更好的了，2024年只找到一个中科院三区的，没写上来</p>
+</blockquote>
+<p><strong>（2）通用领域中的虚假新闻检测技术</strong></p>
+<ul>
+<li>Tactics, Threats &amp; Targets: Modeling Disinformation and its Mitigation
+<ul>
+<li>NDSS <strong>CCF-A</strong></li>
+<li>2023</li>
+<li>研究背景：将网络安全框架应用于理解虚假信息的现状和缓解措施仍然在很大程度上未被探索。作者提议将安全威胁模型应用于虚假信息威胁上，以便更好地将关于虚假信息运动的非结构化信息组织成一种紧凑、结构化的形式，使安全人员可以在有限的资源下有效地应对动态威胁。</li>
+<li>研究内容：Azza A等人提出了一个受网络安全启发的虚假信息威胁分析框架，将安全威胁模型应用于虚假信息领域，系统地定义了虚假信息威胁攻击者的特征、攻击模式、攻击渠道以及攻击目标。</li>
+</ul>
+</li>
+<li>QMFND: A quantum multimodal fusion-based fake news detection model for social media[J].
+<ul>
+<li>Information Fusion <strong>中科院一区</strong></li>
+<li>2024</li>
+<li>研究内容：Qu等人提出了一种基于量子多模态融合的假新闻检测模型，提取并整合新闻的图像和文本特征，通过量子卷积神经网络（QCNN）获得判别结果，提升了检测性能。</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<h1 id="攻击溯源与图谱推理研究现状"><a class="markdownIt-Anchor" href="#攻击溯源与图谱推理研究现状"></a> <strong>攻击溯源与图谱推理研究现状</strong></h1>
+<p><strong>（1）面向知识图谱的关系推理（通用领域）</strong></p>
+<ul>
+<li>
+<p>AdaProp: Learning Adaptive Propagation for Graph Neural Network based Knowledge Graph Reasoning</p>
+<ul>
+<li>KDD '23: Proceedings of the 29th ACM SIGKDD Conference on Knowledge Discovery and Data Mining <strong>CCF-A</strong></li>
+<li>2023</li>
+<li>研究内容：Zhang等人首次将自适应传播路径的概念引入基于GNN的知识图谱推理任务，实现了对不同查询关系的个性化处理，显著提高了推理的准确性和效率。</li>
+</ul>
+</li>
+<li>
+<p>Neuro-Logic Learning for Relation Reasoning over Event Knowledge Graph</p>
+<ul>
+<li>2023 IEEE International Conference on Intelligence and Security Informatics (ISI) <strong>CCF-A</strong></li>
+<li>2023</li>
+<li>研究背景：现有的推理方法往往集中于实体关系，而没有考虑事件知识图的节点属性，例如事件描述和事件时间，这些属性包含丰富的事件信息，对于事件关系推理至关重要。</li>
+<li>研究内容：Tang等人提出了一种基于神经逻辑学习的事件知识图谱关系推理方法，通过事件元素（例如名称、时间、位置和参与者）和描述来学习事件的分布式表示，弥补了可解释性方面的缺陷</li>
+</ul>
+</li>
+<li>
+<p>HIP network: historical information passing network for extrapolation reasoning on temporal knowledge graph</p>
+<ul>
+<li>Artificial Intelligence (<a target="_blank" rel="noopener" href="http://cs.AI">cs.AI</a>) <strong>CCF-A</strong></li>
+<li>2024</li>
+<li>He等人提出了一种“历史信息传递网络（HIP）”模型，从时间、结构和重复性的角度传递历史信息，实现了在时间知识图谱对未来事件的推理和预测。</li>
+</ul>
+</li>
+</ul>
+<p><strong>（2）安全领域的知识图谱推理则更侧重于攻击溯源领域</strong></p>
+<ul>
+<li>Attack Hypotheses Generation Based on Threat Intelligence Knowledge Graph
+<ul>
+<li>Ieee Transactions On Dependable And Secure Computing <strong>CCF-A</strong></li>
+<li>2023</li>
+<li>研究内容：Kaiser等人提出了一种基于威胁情报知识图谱的攻击假设生成方法，基于知识图谱遍历算法和多种链接预测方法自动推断攻击者使用的 ATT&amp;CK 技术。</li>
+</ul>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://isoda.top">isoda</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://isoda.top/posts/155a.html">https://isoda.top/posts/155a.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://isoda.top" target="_blank">isoda's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5/">威胁情报</a></div><div class="post_share"><div class="social-share" data-image="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250331151415771.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://isodatop.oss-cn-beijing.aliyuncs.com/img/QQ%E6%88%AA%E5%9B%BE20231208115838.png" target="_blank"><img class="post-qr-code-img" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/QQ%E6%88%AA%E5%9B%BE20231208115838.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/77ff.html" title="『浏览器安全』浏览器同源策略与沙箱"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/R.f54d1cf1d1e34b8bca603a4f94de3b88" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">『浏览器安全』浏览器同源策略与沙箱</div></div></a></div><div class="next-post pull-right"><a href="/posts/d5ac.html" title="『大模型』本地部署chatglm3-6b"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20240122205804101.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">『大模型』本地部署chatglm3-6b</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">isoda</div><div class="author-info__description">简单 自律 高效</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">41</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">42</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/soda-VV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/soda-VV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:673828733@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">这里是isoda的个人博客，在这里分享我的学习与生活，致力于毕业当公务员摆烂，有问题欢迎探讨交流</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB%E4%BF%A1%E6%81%AF%E6%8A%BD%E5%8F%96%E7%A0%94%E7%A9%B6%E7%8E%B0%E7%8A%B6"><span class="toc-number">1.</span> <span class="toc-text"> 网络攻击信息抽取研究现状</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E9%A2%86%E5%9F%9F%E7%9F%A5%E8%AF%86%E8%9E%8D%E5%90%88%E7%A0%94%E7%A9%B6%E7%8E%B0%E7%8A%B6"><span class="toc-number">2.</span> <span class="toc-text"> 安全领域知识融合研究现状</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%83%85%E6%8A%A5%E5%8F%AF%E9%9D%A0%E6%80%A7%E7%A0%94%E5%88%A4%E7%8E%B0%E7%8A%B6"><span class="toc-number">3.</span> <span class="toc-text"> 攻击情报可靠性研判现状</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%BA%AF%E6%BA%90%E4%B8%8E%E5%9B%BE%E8%B0%B1%E6%8E%A8%E7%90%86%E7%A0%94%E7%A9%B6%E7%8E%B0%E7%8A%B6"><span class="toc-number">4.</span> <span class="toc-text"> 攻击溯源与图谱推理研究现状</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/3e31.html" title="『科研』流程挖掘领域研究现状总结"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250331152521198.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『科研』流程挖掘领域研究现状总结"/></a><div class="content"><a class="title" href="/posts/3e31.html" title="『科研』流程挖掘领域研究现状总结">『科研』流程挖掘领域研究现状总结</a><time datetime="2024-11-27T12:30:15.000Z" title="发表于 2024-11-27 20:30:15">2024-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/adbe.html" title="『科研』流程挖掘领域关键技术总结"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250331152521198.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『科研』流程挖掘领域关键技术总结"/></a><div class="content"><a class="title" href="/posts/adbe.html" title="『科研』流程挖掘领域关键技术总结">『科研』流程挖掘领域关键技术总结</a><time datetime="2024-11-26T15:35:55.000Z" title="发表于 2024-11-26 23:35:55">2024-11-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ac58.html" title="『安全开发』JS安全开发（三）打包器"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/images.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『安全开发』JS安全开发（三）打包器"/></a><div class="content"><a class="title" href="/posts/ac58.html" title="『安全开发』JS安全开发（三）打包器">『安全开发』JS安全开发（三）打包器</a><time datetime="2024-11-01T01:22:13.000Z" title="发表于 2024-11-01 09:22:13">2024-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/3150.html" title="『安全开发』JS安全开发（二）NodeJS"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/f8bcd9d9c6e56b3ab946d700c3478fb9.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『安全开发』JS安全开发（二）NodeJS"/></a><div class="content"><a class="title" href="/posts/3150.html" title="『安全开发』JS安全开发（二）NodeJS">『安全开发』JS安全开发（二）NodeJS</a><time datetime="2024-11-01T01:21:13.000Z" title="发表于 2024-11-01 09:21:13">2024-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/cdb6.html" title="『安全开发』JS安全开发（一）原生开发"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/images.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『安全开发』JS安全开发（一）原生开发"/></a><div class="content"><a class="title" href="/posts/cdb6.html" title="『安全开发』JS安全开发（一）原生开发">『安全开发』JS安全开发（一）原生开发</a><time datetime="2024-11-01T01:20:13.000Z" title="发表于 2024-11-01 09:20:13">2024-11-01</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250331151415771.png')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2025 By isoda</div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
