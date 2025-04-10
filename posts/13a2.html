@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>『跨站脚本攻击』XSS简介 | isoda's Blog</title><meta name="author" content="isoda,673828733@qq.com"><meta name="copyright" content="isoda"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="XSS的简要介绍，主要介绍了XSS的定义原理和三种类型">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>『跨站脚本攻击』XSS攻击 | isoda's Blog</title><meta name="author" content="isoda,673828733@qq.com"><meta name="copyright" content="isoda"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="XSS攻击的介绍，主要包括XSS的基本概念、分类、构造、payload利用和防御">
 <meta property="og:type" content="article">
-<meta property="og:title" content="『跨站脚本攻击』XSS简介">
+<meta property="og:title" content="『跨站脚本攻击』XSS攻击">
 <meta property="og:url" content="https://isoda.top/posts/13a2.html">
 <meta property="og:site_name" content="isoda&#39;s Blog">
-<meta property="og:description" content="XSS的简要介绍，主要介绍了XSS的定义原理和三种类型">
+<meta property="og:description" content="XSS攻击的介绍，主要包括XSS的基本概念、分类、构造、payload利用和防御">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://isodatop.oss-cn-beijing.aliyuncs.com/img/R.7bed854de434dd65014dc58603b8acfc">
 <meta property="article:published_time" content="2024-03-06T02:30:46.000Z">
-<meta property="article:modified_time" content="2025-04-09T08:41:23.811Z">
+<meta property="article:modified_time" content="2025-04-10T05:48:29.163Z">
 <meta property="article:author" content="isoda">
 <meta property="article:tag" content="客户端脚本安全">
 <meta property="article:tag" content="XSS攻击">
@@ -52,12 +52,12 @@
   },
   autoDarkmode: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: '『跨站脚本攻击』XSS简介',
+  title: '『跨站脚本攻击』XSS攻击',
   isPost: true,
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2025-04-09 16:41:23'
+  postUpdate: '2025-04-10 13:48:29'
 }</script><script>(win=>{
       win.saveToLocal = {
         set: (key, value, ttl) => {
@@ -175,11 +175,11 @@
     document.addEventListener('pjax:send', () => { preloader.initLoading() })
     document.addEventListener('pjax:complete', () => { preloader.endLoading() })
   }
-})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">44</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">44</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/R.7bed854de434dd65014dc58603b8acfc')"><nav id="nav"><span id="blog-info"><a href="/" title="isoda's Blog"><span class="site-name">isoda's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">『跨站脚本攻击』XSS简介</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-03-06T02:30:46.000Z" title="发表于 2024-03-06 10:30:46">2024-03-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-09T08:41:23.811Z" title="更新于 2025-04-09 16:41:23">2025-04-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/web%E5%AE%89%E5%85%A8/">web安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">8.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>30分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="『跨站脚本攻击』XSS简介"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="基本概念"><a class="markdownIt-Anchor" href="#基本概念"></a> 基本概念</h1>
-<p>XSS全称是Cross Site Scripting，中文为<strong>跨站脚本攻击</strong>，为了和CSS（层叠样式表（<code>Cascading Style Sheets，CSS</code>））区分命名为XSS。</p>
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">44</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">44</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">18</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/R.7bed854de434dd65014dc58603b8acfc')"><nav id="nav"><span id="blog-info"><a href="/" title="isoda's Blog"><span class="site-name">isoda's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">『跨站脚本攻击』XSS攻击</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-03-06T02:30:46.000Z" title="发表于 2024-03-06 10:30:46">2024-03-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-10T05:48:29.163Z" title="更新于 2025-04-10 13:48:29">2025-04-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/web%E5%AE%89%E5%85%A8/">web安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">8.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>30分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="『跨站脚本攻击』XSS攻击"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="基本概念"><a class="markdownIt-Anchor" href="#基本概念"></a> 基本概念</h1>
+<p>XSS全称是Cross Site Scripting，中文为<strong>跨站脚本攻击</strong>，为了和CSS（层叠样式表，<code>Cascading Style Sheets，CSS</code>）区分命名为XSS。</p>
 <ol>
 <li>
-<p><strong>原理</strong>：在HTML页面中注入恶意脚本，当目标网站目标用户的浏览器渲染HTML文档时，恶意脚本执行，使得黑客可以控制用户浏览器。</p>
+<p><strong>原理</strong>：在HTML页面中注入恶意脚本，当目标网站目标用户的浏览器渲染HTML文档时，恶意脚本执行，使得攻击者可以控制用户浏览器。</p>
 </li>
 <li>
 <p><strong>例子</strong>：</p>
@@ -198,7 +198,7 @@
 <ol>
 <li>
 <p><strong>原理</strong></p>
-<p>一般情况下，黑客发送给别人发送<strong>带有恶意脚本代码参数的 <code>url</code></strong> ，当用户打开这个带有恶意代码参数的 <code>url</code> 地址时，恶意脚本代码作为输入提交到服务器端，服务器端解析后响应，恶意代码被目标服务器通过**错误信息、搜索结果等等方式“反射”**回显在用户的浏览器上，浏览器解析执行XSS代码。</p>
+<p>一般情况下，攻击者发送给别人发送<strong>带有恶意脚本代码参数的 <code>url</code></strong> ，当用户打开这个带有恶意代码参数的 <code>url</code> 地址时，恶意脚本代码作为输入提交到服务器端，服务器端解析后响应，恶意代码被目标服务器通过<strong>错误信息、搜索结果等方式</strong>回显在用户的浏览器上，浏览器解析执行XSS代码。</p>
 <blockquote>
 <p>场景：一般会出现在查询类页面等。</p>
 <p>这种网站一般会显示用户的输入，用户点开会恶意代码参数就会显示在网站上并执行。</p>
@@ -207,7 +207,7 @@
 <li>
 <p><strong>特点</strong></p>
 <ul>
-<li>非持久性。攻击脚本不会写入网站的数据库，是一次性的攻击。所以黑客一般需要诱骗用户点击包含攻击脚本的 URL，才能攻击成功。</li>
+<li>非持久性。攻击脚本不会写入网站的数据库，是一次性的攻击。所以攻击者一般需要诱骗用户点击包含攻击脚本的 URL，才能攻击成功。</li>
 <li>需要传递给服务器，通过服务器反射恶意脚本</li>
 </ul>
 </li>
@@ -227,7 +227,7 @@
 <ol>
 <li>
 <p><strong>原理</strong></p>
-<p>黑客利用XSS 漏洞，将内容经正常功能提交进入目标服务器端的数据库中并持久保存。当正常用户请求目标页面时，前端页面获得后端从数据库中读出的注入代码，恰好将其渲染执行。</p>
+<p>攻击者利用 XSS 漏洞，将内容经正常功能提交进入目标服务器端的数据库中并持久保存。当正常用户请求目标页面时，前端页面获得后端从数据库中读出的注入代码，恰好将其渲染执行。</p>
 <blockquote>
 <p>场景：一般存在于 Form 表单提交等交互功能，如发帖留言，注册页面等。</p>
 </blockquote>
@@ -240,18 +240,22 @@
 </li>
 <li>
 <p><strong>例子</strong></p>
-<p>黑客写下一篇包含有恶意JavaScript 代码的博客文章，文章发表后，所有访问该博客文章的用户，都会在他们的浏览器中执行这段恶意的JavaScript代码。</p>
+<p>攻击者写下一篇包含有恶意 JavaScript 代码的博客文章，文章发表后，所有访问该博客文章的用户，都会在他们的浏览器中执行这段恶意的 JavaScript 代码。</p>
 </li>
 </ol>
 <h2 id="dom-based型xss"><a class="markdownIt-Anchor" href="#dom-based型xss"></a> DOM-based型XSS</h2>
 <ol>
 <li>
 <p><strong>原理</strong></p>
-<p>从效果来看，DOM-based型XSS也属于反射型，但是其形成的原因比较特殊，所以单独拿出来介绍。</p>
 <p><strong>通过DOM操作前端代码输出</strong>的时候形成的XSS为DOM-based型XSS</p>
 <p>客户端的脚本<strong>通过DOM动态地输出数据到页面</strong>而不是依赖于将数据提交给服务器端，而从客户端获得DOM中的数据在本地执行。</p>
+<ul>
+<li>场景：一般产生于用户能够进行参数输入查询的地方</li>
+</ul>
 <blockquote>
-<p>场景：一般产生于用户能够进行参数输入查询的地方</p>
+<ul>
+<li>从效果来看，DOM-based型XSS也属于反射型，但是其形成的原因比较特殊，所以单独拿出来介绍。</li>
+</ul>
 <p><strong>网站本地执行url中的参数而并不传给服务器</strong></p>
 </blockquote>
 </li>
@@ -322,7 +326,7 @@
 <blockquote>
 <p><code>location.hash</code> 对象的具体解释：<a link = https://blog.csdn.net/Garrettzxd/article/details/80671034> location.hash详解</a></p>
 </blockquote>
-<p>因为哈希部分不会被发送到服务器，所以服务器端的Web日志中并不会记录下location.hash 里的内容，从而也更好地隐藏了黑客真实的意图。</p>
+<p>因为哈希部分不会被发送到服务器，所以服务器端的Web日志中并不会记录下location.hash 里的内容，从而也更好地隐藏了攻击者真实的意图。</p>
 <p><code>location.hash</code> 没有长度限制，所以可以将XSS代码写在<code>location.hash</code> 部分，然后在页面中限制长度的地方构造代码执行<code>location.hash</code></p>
 </li>
 <li>
@@ -382,7 +386,7 @@
 <p>因此需要对这个标签进行过滤。</p>
 <h2 id="windowname"><a class="markdownIt-Anchor" href="#windowname"></a> <a target="_blank" rel="noopener" href="http://window.name">window.name</a></h2>
 <p>对当前窗口的<code>window.name</code> 对象赋值，没有特殊字符的限制。</p>
-<p>因为window对象是浏览器的窗体，而并非document对象，因此很多时候window对象不受同源策略的限制。黑客利用这个对象，可以实现跨域、跨页面传递数据。</p>
+<p>因为window对象是浏览器的窗体，而并非document对象，因此很多时候window对象不受同源策略的限制。攻击者利用这个对象，可以实现跨域、跨页面传递数据。</p>
 <p><a target="_blank" rel="noopener" href="http://xn--window-vt9i248w.name">使用window.name</a> 可以缩短XSS Payload的长度，如下所示：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">window.name = &quot;alert(document.cookie)&quot;;</span><br><span class="line">locaton.href = &quot;http://www.xssedsite.com/xssed.php&quot;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
 <p>在同一窗口打开存在XSS的站点后，只需通过XSS执行name中的代码即可：</p>
@@ -466,7 +470,7 @@
 <p>但我们可以通过其他方法来进行攻击：</p>
 <ul>
 <li>验证码：XSS Payload可以读取页面的内容，将验证码的图片URL发送到远程服务器上来实施。攻击者可以在远程XSS后台接收当前验证码，并将验证码的值返回给当前的XSS Payload，从而绕过验证码。</li>
-<li>修改密码：攻击者可以将XSS与&quot;钓鱼&quot;结合。如：利用 Javascript 在当前页面上&quot;画出&quot;一个伪造的登录框，当用户在登录框中输入用户名和密码后，其密码将被发送到黑客的服务器上。</li>
+<li>修改密码：攻击者可以将XSS与&quot;钓鱼&quot;结合。如：利用 Javascript 在当前页面上&quot;画出&quot;一个伪造的登录框，当用户在登录框中输入用户名和密码后，其密码将被发送到攻击者的服务器上。</li>
 </ul>
 <h2 id="识别用户浏览器"><a class="markdownIt-Anchor" href="#识别用户浏览器"></a> 识别用户浏览器</h2>
 <p>在很多时候，攻击者为了获取更大的利益，往往需要准确地收集用户的个人信息。比如，如果知道用户使用的浏览器、操作系统，攻击者就有可能实施一次精准的浏览器内存攻击，最终给用户电脑植入一个木马。</p>
@@ -513,14 +517,14 @@
 <p>很多时候，用户电脑使用了代理服务器，或者在局域网中隐藏在NAT后面。网站看到的客户端IP地址，是内网的出口IP地址，而并非用户电脑真实的本地IP地址。如何才能知道用户的本地IP地址呢?</p>
 <p>可以通过XSS Payload获取客户端的本地IP地址。</p>
 <p>**javascript本身并没有获取本地IP地址的能力。**一般需要第三方软件来完成。</p>
-<p>比如，客户端安装了Java环境(JRE)，那么XSS就可以通过调用J ava Applet 的接口获取客户端的本地IP地址。</p>
+<p>比如，客户端安装了Java环境(JRE)，那么XSS就可以通过调用 Java Applet 的接口获取客户端的本地IP地址。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">AttackAPI</span>.<span class="property">dom</span>.<span class="property">getInternalIP</span>=<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">var</span> sock = <span class="keyword">new</span> java.<span class="property">net</span>.<span class="title class_">Socket</span>();</span><br><span class="line">      sock.<span class="title function_">bind</span>(<span class="keyword">new</span> java.<span class="property">net</span>.<span class="title class_">InetSocketAddress</span>(<span class="string">&#x27;0.0.0.0&#x27;</span>,<span class="number">0</span>));</span><br><span class="line">      sock.<span class="title function_">connect</span>(<span class="keyword">new</span> java.<span class="property">net</span>.<span class="title class_">InetSocketAddress</span>(<span class="variable language_">document</span>.<span class="property">domain</span>,(!<span class="variable language_">document</span>.<span class="property">location</span>.<span class="property">port</span>)?<span class="number">80</span>:<span class="variable language_">document</span>.<span class="property">location</span>.<span class="property">port</span>));</span><br><span class="line">      <span class="keyword">return</span> sock.<span class="title function_">getLocalAddress</span>().<span class="title function_">getHostAddress</span>();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;127.0.0.1&#x27;</span>;  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>还有两个通过API获取本地网络信息的API见《白帽子讲web安全》P61</p>
 <h2 id="xss蠕虫"><a class="markdownIt-Anchor" href="#xss蠕虫"></a> XSS蠕虫</h2>
 <ol>
 <li>
 <p><strong>定义</strong></p>
-<p>XSS蠕虫是指一种具有自我传播能力的XSS攻击，破坏力和影响力巨大。XSS蠕虫借助 Ajax技术实现对Web应用程序中存在的 XSS 漏洞进行自动化利用传播，它可以将一些用户数据信息发送给Web应用程序然后再将自身代码传递进入Web应用程序，等到被感染用户访问Web应用程序时，蠕虫自身将又开始进行数据发送感染。</p>
+<p>XSS蠕虫是指一种具有自我传播能力的XSS攻击，破坏力和影响力巨大。XSS蠕虫借助 Ajax 技术实现对Web应用程序中存在的 XSS 漏洞的自动化利用传播，它可以将一些用户数据信息发送给Web应用程序然后再将自身代码传递进入Web应用程序，等到被感染用户访问Web应用程序时，蠕虫自身将又开始进行数据发送感染。</p>
 </li>
 <li>
 <p><strong>应用场景与条件</strong></p>
