@@ -1,0 +1,474 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>『LLM』RAG检索增强生成技术 | isoda's Blog</title><meta name="author" content="isoda,673828733@qq.com"><meta name="copyright" content="isoda"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="本文主要介绍RAG检索增强生成技术">
+<meta property="og:type" content="article">
+<meta property="og:title" content="『LLM』RAG检索增强生成技术">
+<meta property="og:url" content="https://isoda.top/posts/8c63.html">
+<meta property="og:site_name" content="isoda&#39;s Blog">
+<meta property="og:description" content="本文主要介绍RAG检索增强生成技术">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250424103614828.png">
+<meta property="article:published_time" content="2024-12-10T02:25:43.000Z">
+<meta property="article:modified_time" content="2025-04-24T02:36:26.849Z">
+<meta property="article:author" content="isoda">
+<meta property="article:tag" content="RAG检索增强生成技术">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250424103614828.png"><link rel="shortcut icon" href="https://isodatop.oss-cn-beijing.aliyuncs.com/img/SY7%7DZ%7B%28%28%7DTKN%29MJQGMMXJJ2.png"><link rel="canonical" href="https://isoda.top/posts/8c63.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文距离发布日期已经过去了：","messageNext":"天，部分资源可能已经不存在了，详情可以咨询作者"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体中文","cht_to_chs":"你已切换为简体中文","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#9400D3","bgDark":"#C0C0C0","position":"top-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '『LLM』RAG检索增强生成技术',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-04-24 10:36:26'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">51</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250424103614828.png')"><nav id="nav"><span id="blog-info"><a href="/" title="isoda's Blog"><span class="site-name">isoda's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">『LLM』RAG检索增强生成技术</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-10T02:25:43.000Z" title="发表于 2024-12-10 10:25:43">2024-12-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-24T02:36:26.849Z" title="更新于 2025-04-24 10:36:26">2025-04-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/LLM/">LLM</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="『LLM』RAG检索增强生成技术"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="基础概念"><a class="markdownIt-Anchor" href="#基础概念"></a> 基础概念</h1>
+<ol>
+<li>
+<p><strong>什么是RAG</strong></p>
+<p>RAG（Retrieval-Augmented Generation，检索增强生成）简单来说就是给LLM提供一个外部知识库，当用户提问的时候，通过信息检索技术从外部知识库中检索出和用户问题相关的信息，然后让 LLM 结合这些相关信息来生成结果。</p>
+</li>
+<li>
+<p><strong>优点</strong></p>
+<p><strong>1）提升对长尾知识的回答效果</strong></p>
+<p>LLM 对长尾知识的学习能力比较弱，生成的回复通常并不可靠。因为LLM训练数据的涵盖范围有限，让LLM在有限的参数中记住所有知识或者信息是不现实的，总会有一些长尾知识在训练数据中不能覆盖到。</p>
+<p><mark>为了提升 LLM 对长尾知识的学习能力：</mark></p>
+<ul>
+<li><u>在训练数据加入更多的相关长尾知识，或者增大模型的参数量</u>，虽然这两种方法确实都有一定的效果，但这两种方法是不经济的，需要一个很大的训练数据量级和模型参数才能大幅度提升 LLM 对长尾知识的回复准确性。</li>
+<li><strong>RAG：通过检索的方法把相关信息在 LLM 推断时作为上下文给出</strong>，既能达到一个比较好的回复准确性，也是一种比较经济的方式。</li>
+</ul>
+<p><strong>2）私有数据</strong></p>
+<ul>
+<li>目前通用的 LLM 预训练阶段利用的大部分都是公开的数据，不包含私有数据，因此对于一些私有领域知识是欠缺的。比如问 LLM 某个企业内部相关的知识，LLM 大概率是不知道或者胡编乱造。如果我们采用私有数据微调或者在预训练阶段就加上私有数据的方法，训练和迭代成本很高。</li>
+<li>此外，通过一些特定的攻击手法，可以让 LLM 泄漏训练数据，如果训练数据中包含一些私有信息，就很可能会发生隐私信息泄露。</li>
+</ul>
+<p><u>RAG的好处在于：将私有数据作为一个外部数据库，让 LLM 在回答基于私有数据的问题时，直接从外部数据库中检索出相关信息，再结合检索出的相关信息进行回答</u>。这样就不用通过预训练或者微调的方法让 LLM 在参数中记住私有知识，既节省了训练或者微调成本，也一定程度上避免了私有数据的泄露风险。</p>
+<p><strong>3）数据实时更新</strong></p>
+<p>因为有一些知识或者信息更新得很频繁，<strong>LLM 通过从预训练数据中学到的这部分信息就很容易过时</strong>。如果<u>把频繁更新的知识作为外部数据库，让 LLM 在回答的时候进行检索，就可以实现在不重新训练 LLM 的情况下对它的的知识进行更新和拓展，从而解决 LLM 数据新鲜度的问题</u>。</p>
+<p><strong>4）结果的可解释性</strong></p>
+<p>通常情况下，LLM 生成的输出不会给出其来源，很难解释LLM为什么会这么回答，基于什么信息生成的回答。而RAG的思想就可以给出LLM生成回复的参考来源，增强了可解释性。</p>
+<p>典型的一个通过检索来增强输出的例子就是 <code>Bing Chat</code>，其生成的回复中会给出相关信息的链接：</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250418111338703.png" alt="image-20250418111338703" /></p>
+</li>
+</ol>
+<h1 id="关键模块"><a class="markdownIt-Anchor" href="#关键模块"></a> 关键模块</h1>
+<p>RAG 需要实现的关键模块，和对应模块需要解决的问题包括：</p>
+<ul>
+<li><strong>数据和索引模块</strong>：如何处理外部数据和构建索引</li>
+<li><strong>查询和检索模块</strong>：如何准确高效地检索出相关信息</li>
+<li><strong>响应生成模块</strong>：如何利用检索出的相关信息来增强 LLM 的输出</li>
+</ul>
+<h2 id="数据和索引模块"><a class="markdownIt-Anchor" href="#数据和索引模块"></a> 数据和索引模块</h2>
+<h3 id="数据获取"><a class="markdownIt-Anchor" href="#数据获取"></a> 数据获取</h3>
+<ol>
+<li>
+<p>数据获取模块的主要作用在于：<strong>将多种来源、多种类型和格式的外部数据转换成一个统一的文档对象( Document Object )</strong> 。文档对象包括<strong>原始文本内容 + 文档的元信息 ( Metadata )</strong>。</p>
+<ul>
+<li>元信息：通过NLP技术（实体识别、文本分类等）或 LLM 实现提取
+<ul>
+<li>文本总结和摘要</li>
+<li>时间信息，比如文档创建和修改时间</li>
+<li>标题、关键词、实体(人物、地点等)、文本类别等信息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>外部数据</p>
+<ul>
+<li>
+<p>来源：聊天数据、Github托管代码文件、Web网页内容、各种文档</p>
+</li>
+<li>
+<p>格式：纯文本、代码、文档、图片、音频、视频等</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="文本分块"><a class="markdownIt-Anchor" href="#文本分块"></a> 文本分块</h3>
+<ol>
+<li>
+<p><strong>为什么要进行文本分块</strong></p>
+<p>因为 LLM 的上下文长度限制，直接把一篇长文全部作为相关信息放到 LLM 的上下文窗口中，可能会超过长度限制。另一方面，一般查询到的文章不会和用户提问完全相关，分块能一定程度上剔除不相关的内容，为后续的回复生成过滤一些不必要的噪声。</p>
+</li>
+<li>
+<p><strong>设计分块策略时需要考虑的因素</strong></p>
+<ul>
+<li>
+<p><strong>原始内容的特点</strong>：原始内容是长文 ( 博客文章、书籍等 ) 还是短文 ( 推文、即时消息等 )，是什么格式 ( HTML、Markdown、Code 还是 LaTeX 等 )，不同类型内容适用于不同的分块策略。</p>
+<blockquote>
+<p>比如针对长文，我们可以将它分割成较大的文本块，便于LLM整体理解和处理。如果是短文，则通常不需要大幅度分块，因为它本身较为简短，处理时不容易超出输入限制。</p>
+<p>代码可能需要按照功能进行分块，而HTML文档则可能基于标签结构进行分块。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>结合后续使用的索引方法</strong>：目前最常用的索引是对分块后的内容进行向量索引，在设计分块策略时，需要考虑所使用的向量嵌入模型对分块大小的要求。</p>
+<blockquote>
+<p>比如 sentence-transformer 模型比较适合对句子级别的内容进行嵌入，OpenAI 的 text-embedding-ada-002 模型比较适合的分块大小在 256~512 个token；</p>
+</blockquote>
+</li>
+<li>
+<p><strong>检索出的相关内容在回复生成阶段的使用方法</strong>：如果是直接把检索出的相关内容作为 Prompt 的一部分提供给 LLM，那么 LLM 的输入长度限制在设计分块大小时就需要考虑。</p>
+</li>
+<li>
+<p><strong>问题的长度</strong>：问题的长度需要考虑，因为需要基于问题去检索出相关的文本片段，如果问题较长且复杂，检索到的内容也可能会比较多。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>分块实现方法</strong></p>
+<p><strong>1）将原始的长文本切分成小的语义单元（比如句子级别或者段落级别）</strong></p>
+<p><strong>常用方法</strong>：定义一组分割符进行迭代切分（比如定义 <code>[&quot;\n\n&quot;, &quot;\n&quot;, &quot; &quot;, &quot;&quot;]</code> 这样一组分隔符），切分的时候先利用第一个分割符进行切分 ( 实现类似按段落切分的效果 )，第一次切分完成后，对于超过预设大小的块，继续使用后面的分割符进行切分，依此类推。这种切分方法能比较好地保持原始文本的层次结构。</p>
+<ul>
+<li>
+<p><strong>对于一些结构化的文本，比如代码，Markdown等文本</strong>，在进行切分的时候要注意保证结构的完整性和一致性：</p>
+<ul>
+<li>
+<p>比如 Python 代码文件通常包含多个函数、类、变量等代码单元，这些单元之间的逻辑关系非常重要。简单地按行分割可能会破坏代码的语法和功能，因此在切分时需要特别关注代码块的边界。</p>
+<p>在分块时，以Python关键字（如<code>class</code>、<code>def</code>等）作为切分符号，在分割符中加入类似 <code>\nclass </code>，<code>\ndef </code>  这种来保证类和函数代码块的完整性；</p>
+</li>
+<li>
+<p>比如 Markdown 文件，是使用<code>#</code>符号来表示不同层级的标题，在切分时就可以根据标题的层级来决定分块的大小。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>2）将这些小的语义单元融合成更大的文本块，直到达到设定的块大小 ( Chunk Size )，就将该块作为独立的文本片段。</strong></p>
+<p><mark>① 文本块大小的影响</mark></p>
+<ul>
+<li>太大：可能超出模型的最大输入长度限制，导致模型在生成回复时处理起来过于复杂，从而响应变慢。同时，过大的文本块可能会包含不相关的信息，降低生成内容的准确性。</li>
+<li>太小：可能会使模型更难抓住长文本中的整体语义，导致生成的内容片段较为片面。</li>
+</ul>
+<p><mark>② 文本块大小的计算方法</mark></p>
+<ul>
+<li>
+<p>基于字符数</p>
+<p>将文本按照字符数来分割。例如，设定一个文本块最大字符数为1000个字符，那么每当文本达到或超过1000个字符时，就会切分为一个新的文本块。</p>
+</li>
+<li>
+<p>基于token数</p>
+<p>基于token数计算块大小，LLM都是基于token来处理文本，这样更符合模型处理方式。</p>
+<blockquote>
+<p>标记（Token）是语言模型处理文本的最小单位，通常包括词汇、符号、标点符号等。每个标记可以代表一个词或部分词。例如，在英语中，“I’m”可能被分为两个标记（I 和 ’m），而在中文中，一个词就可能是一个标记。</p>
+</blockquote>
+</li>
+</ul>
+<p><mark>③ 如何确定文本块的大小</mark></p>
+<p>根据不同的场景来选择，比如在处理技术文档时，较大的块可能更有利于捕捉全局信息；在处理新闻摘要时，较小的文本块可能更有利于抓住核心内容。实际操作中，可以通过反复测试不同的分块大小，评估模型生成的回复是否符合要求，最终选择最适合的块大小。</p>
+<p><strong>3）迭代构建下一个文本片段，一般相邻的文本片段之间会设置重叠，以保持语义的连贯性。</strong></p>
+<p>为了确保相邻块之间的语义连贯性，可以设计重叠部分。这样做有助于保持信息的连续性，尤其是在跨越文本块的边界时，避免信息丢失或断裂。<strong>通常重叠部分会是相邻块的最后几句话或段落</strong>。</p>
+<blockquote>
+<p>例如，我们希望在块之间有<strong>1个句子重叠</strong>，那么：</p>
+<ul>
+<li>
+<p><strong>块1</strong>：句子1 + 句子2 + 句子3</p>
+<p>“今天的天气真好，阳光明媚，气温适宜。大家都在公园里散步，享受着美好的天气。孩子们在草地上玩耍，欢声笑语不绝于耳。”</p>
+</li>
+<li>
+<p><strong>块2</strong>：句子3 + 句子4 + 句子5</p>
+<p>“孩子们在草地上玩耍，欢声笑语不绝于耳。人们脸上洋溢着幸福的微笑，仿佛所有的疲劳都被阳光驱散了。公园内的花草也开始慢慢盛开，春天的气息充满了整个城市。”</p>
+</li>
+</ul>
+<p>通过设置重叠，<strong>句子3</strong>在两个块中都出现，确保了语义的一致性，并且在跨块时，信息不会中断。</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="数据索引"><a class="markdownIt-Anchor" href="#数据索引"></a> 数据索引</h3>
+<p>在这一模块对处理好的数据进行索引，用于快速检索出与用户查询相关的文本内容</p>
+<p><mark><strong>常见的索引结构</strong></mark></p>
+<h4 id="链式索引"><a class="markdownIt-Anchor" href="#链式索引"></a> 链式索引</h4>
+<ol>
+<li>
+<p><strong>原理</strong>：通过链表将多个文本块（如文档、段落、句子等）链接在一起，形成一个顺序的链条。每个链表节点包含一个文本块的内容，以及指向下一个节点的指针。</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250418170333710.png" alt="image-20250418170333710" /></p>
+</li>
+<li>
+<p><mark><strong>检索方法</strong></mark></p>
+<p>1）顺序遍历：通过简单地遍历链表中的所有节点来顺序访问文本块</p>
+<p>2）基于关键词过滤：节点存储文本块相关元数据（如关键词、标签），检索的时候使用关键词对链表进行过滤（遍历链表中的每个节点，查找包含指定关键词的文本块，然后返回这些节点）。</p>
+</li>
+</ol>
+<h4 id="树索引"><a class="markdownIt-Anchor" href="#树索引"></a> 树索引</h4>
+<ol>
+<li>
+<p><strong>原理</strong>：将一组文本块（节点）自下而上地构建树形结构。树的每个节点存储一个文本块或该文本块的摘要，每个父节点通常是子节点内容的摘要或概括。树的根节点通常包含整个文本集合或整个文档的汇总信息。</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250418171346838.png" alt="image-20250418171346838" /></p>
+</li>
+<li>
+<p><strong>检索方法</strong></p>
+<ul>
+<li>从根节点向下进行遍历。根据查询的关键词逐层深入到叶节点，定位相关的文本块</li>
+<li>基于根节点信息进行检索。在某些情况下，直接访问根节点的摘要信息即可获得足够的上下文信息，进而避免了对所有子节点的详细查询。</li>
+</ul>
+</li>
+<li>
+<p><strong>具体实现</strong></p>
+</li>
+</ol>
+<h4 id="关键词表索引"><a class="markdownIt-Anchor" href="#关键词表索引"></a> 关键词表索引</h4>
+<ol>
+<li>
+<p><strong>原理</strong>：提取每个文本块节点地关键词，建立一个关键词到节点的映射表。支持多对多的关系，即每个关键词可以指向多个节点，每个节点也可以包含多个关键词。</p>
+<p><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250418171722561.png" alt="image-20250418171722561" /></p>
+</li>
+<li>
+<p><strong>检索方法</strong></p>
+<p><strong>1) 查询关键词匹配</strong></p>
+<p>用户输入的查询会被分词并与关键词表中的条目进行匹配。每个查询关键词都会在关键词表中查找（倒排查询），找到包含该关键词的所有节点。</p>
+<p><strong>2) 多个关键词匹）</strong></p>
+<ul>
+<li>
+<p><strong>交集查询</strong>：如果查询中包含多个关键词，检索过程通常需要将这些关键词对应的节点集合进行交集操作，得到同时包含所有查询关键词的节点。这一步骤大大缩小了检索范围，提高了查询的精度。</p>
+</li>
+<li>
+<p><strong>相关性排序</strong>：对于查询中包含多个关键词的情况，关键词表索引还可以根据每个节点中关键词的出现频率或其他相关性指标，对节点进行排序，返回最相关的结果。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="向量索引最流行"><a class="markdownIt-Anchor" href="#向量索引最流行"></a> 向量索引（最流行）</h4>
+<ol>
+<li>
+<p><strong>原理</strong></p>
+<p>这种方法一般利用<strong>文本嵌入模型</strong> ( Text Embedding Model ) 将文本块映射成一个固定长度的向量，然后存储在<strong>向量数据库</strong>中。检索的时候，对用户查询文本采用同样的文本嵌入模型映射成向量，然后基于向量相似度计算获取最相似的一个或者多个节点。</p>
+</li>
+<li>
+<p><strong>文本嵌入模型</strong></p>
+<p>有很多现成的文本嵌入模型：</p>
+<ul>
+<li>早期的 Word2Vec、GloVe 模型等，目前很少用。</li>
+<li>基于孪生 BERT 网络预训练得到的 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1908.10084">Sentence Transformers</a> 模型，对句子的嵌入效果比较好</li>
+<li>OpenAI 提供的 <a target="_blank" rel="noopener" href="https://openai.com/blog/new-and-improved-embedding-model">text-embedding-ada-002</a> 模型，嵌入效果表现不错，且可以处理最大 8191 标记长度的文本</li>
+<li><a target="_blank" rel="noopener" href="https://instructor-embedding.github.io/">Instructor</a> 模型，这是一个经过指令微调的文本嵌入模型，可以根据任务(例如分类、检索、聚类、文本评估等)和领域(例如科学、金融等)，提供任务指令而生成相对定制化的文本嵌入向量，无需进行任何微调</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/FlagOpen/FlagEmbedding/blob/master/README_zh.md">BGE</a>模型: 由智源研究院开源的中英文语义向量模型，目前在MTEB中英文榜单都排在第一位。</li>
+</ul>
+<p><mark>这些现成的文本嵌入模型没有针对特定的下游任务进行微调，所以不一定在下游任务上有足够好的表现，最好的方式一般是在下游特定的数据上重新训练或者微调自己的文本嵌入模型。</mark></p>
+</li>
+<li>
+<p><strong>相似向量检索</strong></p>
+<ul>
+<li><strong>相似性度量</strong>：通常情况下可以直接使用<strong>余弦相似度</strong>，也可以采用点积、欧式距离等方法</li>
+<li><strong>相似向量检索</strong>：使用向量数据库 Faiss</li>
+</ul>
+</li>
+</ol>
+<h2 id="查询和检索模块"><a class="markdownIt-Anchor" href="#查询和检索模块"></a> 查询和检索模块</h2>
+<h3 id="查询变换"><a class="markdownIt-Anchor" href="#查询变换"></a> 查询变换</h3>
+<ol>
+<li>
+<p><strong>为什么要进行查询变换</strong></p>
+<p>因为用户在提问时的表达方式可能较为局限，为了提高系统对用户查询意图的理解，需要通过查询变换的方式对查询文本进行调整、重写或扩展。</p>
+</li>
+<li>
+<p><strong>查询变换的方式</strong></p>
+<p><strong>1）同义改写</strong>：将原始查询改写成相同语义下不同的表达方式（改写工作可以调用 LLM 完成），针对每个改写后的查询分别检索出相关的文档，然后将这些结果合并和去重，最终得到一个更全面的答案集合。</p>
+<blockquote>
+<p>例如：原始查询为&quot;如何进行LLM微调&quot;，可以通过查询变换为”LLM微调的方法有哪些“、”LLM微调包括哪些步骤“</p>
+</blockquote>
+<p><strong>2）查询分解</strong>：将复杂问题分解成多个简单的子查询</p>
+<ul>
+<li>
+<p><strong>单步分解</strong>：将一个复杂查询转化为多个简单的子查询，逐一解答后再综合所有答案生成最终回复结果。</p>
+<blockquote>
+<p>例如，提问：”如何进行LLM微调？“，可以单步分解成：</p>
+<ul>
+<li>
+<p>子查询一：“什么是LLM微调？”</p>
+</li>
+<li>
+<p>子查询二：“LLM微调中常用的技术有哪些？”</p>
+</li>
+<li>
+<p>子查询三：“如何选择微调的数据集？”</p>
+</li>
+</ul>
+</blockquote>
+</li>
+<li>
+<p><strong>多步分解</strong>：基于初始的复杂查询，综合前一步的回复结果生成下一步的查询问题，直到问不出更多问题为止。最后结合每一步的回复生成最终的结果。</p>
+</li>
+</ul>
+<p><strong>3）HyDE(假设文档嵌入)</strong>：根据原始查询生成一个假设答案文档，将假设文档向量化之后在向量库中进行检索，可以找到更多上下文相关的答案。</p>
+</li>
+</ol>
+<h3 id="排序和后处理"><a class="markdownIt-Anchor" href="#排序和后处理"></a> 排序和后处理</h3>
+<p>经过前面的检索过程可能会得到很多相关文档，就需要进行筛选和排序。</p>
+<p>常用的筛选和排序策略包括：</p>
+<ul>
+<li>基于相似度分数进行过滤和排序</li>
+<li>基于关键词进行过滤，比如限定包含或者不包含某些关键词</li>
+<li>让 LLM 基于返回的相关文档及其相关性得分来重新排序</li>
+<li>基于时间进行过滤和排序，比如只筛选最新的相关文档</li>
+<li>基于时间对相似度进行加权，然后进行排序和筛选</li>
+</ul>
+<h2 id="回复生成模块"><a class="markdownIt-Anchor" href="#回复生成模块"></a> 回复生成模块</h2>
+<p><mark><strong>回复生成策略</strong></mark></p>
+<ol>
+<li>
+<p><strong>结合每个检索出的相关文本块，多次调用LLM不断修正生成的回复</strong></p>
+<p>有多少个独立的相关文本块，就会产生多少次的 LLM 调用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">举例： 假设用户的查询是：“如何进行LLM微调？”</span><br><span class="line"></span><br><span class="line">- 第一个相关文本块提到：“LLM微调是通过选择合适的训练数据集来适应特定任务。”</span><br><span class="line">- 第二个相关文本块提到：“使用迁移学习技术可以提高LLM的任务适应性。”</span><br><span class="line"></span><br><span class="line">系统首先基于第一个文本块生成一个初步的回答：“LLM微调是通过选择合适的训练数据集进行的。” 然后，基于第二个文本块，生成的回答会得到修正：“LLM微调是通过选择合适的训练数据集，并结合迁移学习技术来提高模型的任务适应性。”</span><br></pre></td></tr></table></figure>
+<ul>
+<li>优点：确保了每个文本块的贡献都能反映到最终的回答中</li>
+<li>缺点：多次LLM调用，增加计算负担。</li>
+</ul>
+</li>
+<li>
+<p><strong>填充多个文本块到 Prompt 中，通过一次LLM调用生成回复</strong></p>
+<p>如果一个 Prompt 中填充不下，可以分成多个 Prompt 来处理，每个 Prompt 中包含不同的文本块，最后汇总各个回复。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Context information is below.</span><br><span class="line">---------------------</span><br><span class="line">LLM微调是通过选择合适的训练数据集。</span><br><span class="line">LLM微调结合迁移学习技术。</span><br><span class="line">微调的结果会根据不同的任务需求有所变化。</span><br><span class="line">---------------------</span><br><span class="line">Using both the context information and also using your own knowledge, answer the question: 如何进行LLM微调？</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://isoda.top">isoda</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://isoda.top/posts/8c63.html">https://isoda.top/posts/8c63.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://isoda.top" target="_blank">isoda's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/RAG%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%E6%8A%80%E6%9C%AF/">RAG检索增强生成技术</a></div><div class="post_share"><div class="social-share" data-image="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250424103614828.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://isodatop.oss-cn-beijing.aliyuncs.com/img/QQ%E6%88%AA%E5%9B%BE20231208115838.png" target="_blank"><img class="post-qr-code-img" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/QQ%E6%88%AA%E5%9B%BE20231208115838.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/111e.html" title="『Java』Java Agent开发"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250329151713138.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">『Java』Java Agent开发</div></div></a></div><div class="next-post pull-right"><a href="/posts/3e31.html" title="『科研』流程挖掘领域研究现状总结"><img class="cover" src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250331152521198.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">『科研』流程挖掘领域研究现状总结</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">isoda</div><div class="author-info__description">简单 自律 高效</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">51</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/soda-VV"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/soda-VV" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:673828733@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">这里是isoda的个人博客，在这里分享我的学习与生活。目前是在读的网安研究生，致力于威胁情报、漏洞检测、大模型领域安全研究，有问题欢迎一起探讨交流！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text"> 基础概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E6%A8%A1%E5%9D%97"><span class="toc-number">2.</span> <span class="toc-text"> 关键模块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%92%8C%E7%B4%A2%E5%BC%95%E6%A8%A1%E5%9D%97"><span class="toc-number">2.1.</span> <span class="toc-text"> 数据和索引模块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 数据获取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%9C%AC%E5%88%86%E5%9D%97"><span class="toc-number">2.1.2.</span> <span class="toc-text"> 文本分块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B4%A2%E5%BC%95"><span class="toc-number">2.1.3.</span> <span class="toc-text"> 数据索引</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%93%BE%E5%BC%8F%E7%B4%A2%E5%BC%95"><span class="toc-number">2.1.3.1.</span> <span class="toc-text"> 链式索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%91%E7%B4%A2%E5%BC%95"><span class="toc-number">2.1.3.2.</span> <span class="toc-text"> 树索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%AF%8D%E8%A1%A8%E7%B4%A2%E5%BC%95"><span class="toc-number">2.1.3.3.</span> <span class="toc-text"> 关键词表索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95%E6%9C%80%E6%B5%81%E8%A1%8C"><span class="toc-number">2.1.3.4.</span> <span class="toc-text"> 向量索引（最流行）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E5%92%8C%E6%A3%80%E7%B4%A2%E6%A8%A1%E5%9D%97"><span class="toc-number">2.2.</span> <span class="toc-text"> 查询和检索模块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E5%8F%98%E6%8D%A2"><span class="toc-number">2.2.1.</span> <span class="toc-text"> 查询变换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F%E5%92%8C%E5%90%8E%E5%A4%84%E7%90%86"><span class="toc-number">2.2.2.</span> <span class="toc-text"> 排序和后处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9E%E5%A4%8D%E7%94%9F%E6%88%90%E6%A8%A1%E5%9D%97"><span class="toc-number">2.3.</span> <span class="toc-text"> 回复生成模块</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/7a66.html" title="『Java内存马』Java内存马攻防技术"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20241206104623582.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『Java内存马』Java内存马攻防技术"/></a><div class="content"><a class="title" href="/posts/7a66.html" title="『Java内存马』Java内存马攻防技术">『Java内存马』Java内存马攻防技术</a><time datetime="2025-03-10T00:25:43.000Z" title="发表于 2025-03-10 08:25:43">2025-03-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/c2a6.html" title="『Java内存马』RASP检测Java内存马"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20241206104623582.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『Java内存马』RASP检测Java内存马"/></a><div class="content"><a class="title" href="/posts/c2a6.html" title="『Java内存马』RASP检测Java内存马">『Java内存马』RASP检测Java内存马</a><time datetime="2025-03-05T00:25:43.000Z" title="发表于 2025-03-05 08:25:43">2025-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/111e.html" title="『Java』Java Agent开发"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250329151713138.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『Java』Java Agent开发"/></a><div class="content"><a class="title" href="/posts/111e.html" title="『Java』Java Agent开发">『Java』Java Agent开发</a><time datetime="2025-03-01T00:20:41.000Z" title="发表于 2025-03-01 08:20:41">2025-03-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/8c63.html" title="『LLM』RAG检索增强生成技术"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250424103614828.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『LLM』RAG检索增强生成技术"/></a><div class="content"><a class="title" href="/posts/8c63.html" title="『LLM』RAG检索增强生成技术">『LLM』RAG检索增强生成技术</a><time datetime="2024-12-10T02:25:43.000Z" title="发表于 2024-12-10 10:25:43">2024-12-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/3e31.html" title="『科研』流程挖掘领域研究现状总结"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250331152521198.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="『科研』流程挖掘领域研究现状总结"/></a><div class="content"><a class="title" href="/posts/3e31.html" title="『科研』流程挖掘领域研究现状总结">『科研』流程挖掘领域研究现状总结</a><time datetime="2024-11-27T12:30:15.000Z" title="发表于 2024-11-27 20:30:15">2024-11-27</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250424103614828.png')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2025 By isoda</div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://butterfly.js.org/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
