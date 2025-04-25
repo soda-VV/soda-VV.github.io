@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250424103614828.png">
 <meta property="article:published_time" content="2024-12-10T02:25:43.000Z">
-<meta property="article:modified_time" content="2025-04-24T02:36:26.849Z">
+<meta property="article:modified_time" content="2025-04-25T03:50:42.085Z">
 <meta property="article:author" content="isoda">
 <meta property="article:tag" content="RAG检索增强生成技术">
 <meta name="twitter:card" content="summary">
@@ -56,7 +56,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2025-04-24 10:36:26'
+  postUpdate: '2025-04-25 11:50:42'
 }</script><script>(win=>{
       win.saveToLocal = {
         set: (key, value, ttl) => {
@@ -174,7 +174,7 @@
     document.addEventListener('pjax:send', () => { preloader.initLoading() })
     document.addEventListener('pjax:complete', () => { preloader.endLoading() })
   }
-})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">51</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250424103614828.png')"><nav id="nav"><span id="blog-info"><a href="/" title="isoda's Blog"><span class="site-name">isoda's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">『LLM』RAG检索增强生成技术</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-10T02:25:43.000Z" title="发表于 2024-12-10 10:25:43">2024-12-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-24T02:36:26.849Z" title="更新于 2025-04-24 10:36:26">2025-04-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/LLM/">LLM</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="『LLM』RAG检索增强生成技术"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="基础概念"><a class="markdownIt-Anchor" href="#基础概念"></a> 基础概念</h1>
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://isodatop.oss-cn-beijing.aliyuncs.com/img/vv.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">51</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://isodatop.oss-cn-beijing.aliyuncs.com/img/image-20250424103614828.png')"><nav id="nav"><span id="blog-info"><a href="/" title="isoda's Blog"><span class="site-name">isoda's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/life/"><i class="fa-fw fa fa-coffee"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">『LLM』RAG检索增强生成技术</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-10T02:25:43.000Z" title="发表于 2024-12-10 10:25:43">2024-12-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-25T03:50:42.085Z" title="更新于 2025-04-25 11:50:42">2025-04-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/LLM/">LLM</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>16分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="『LLM』RAG检索增强生成技术"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="基础概念"><a class="markdownIt-Anchor" href="#基础概念"></a> 基础概念</h1>
 <ol>
 <li>
 <p><strong>什么是RAG</strong></p>
@@ -403,6 +403,104 @@
 <li><strong>相似向量检索</strong>：使用向量数据库 Faiss</li>
 </ul>
 </li>
+<li>
+<p><strong>向量数据库选型</strong></p>
+<ul>
+<li>
+<p><strong>Milvus</strong> ：分布式架构，性能高（支持多种索引类型），支持多模态数据类型，适合大规模数据</p>
+</li>
+<li>
+<p><strong>Faiss</strong>：灵活（可以很方便地集成），支持多种索引类型，支持GPU加速，可以实现快速检索（如IVF、PQ、HNSW 等）。但是本质上还是一个库，而不是完整的数据库系统，缺乏数据管理等功能</p>
+</li>
+<li>
+<p><strong>Weaviate</strong>：支持多模态数据类型，支持混合检索（结合传统的关键词搜索和向量搜索），检索效果好。但是不持支GPU加速</p>
+<ul>
+<li>
+<p>低延迟：适合实时应用场景。</p>
+</li>
+<li>
+<p>适用场景：复杂查询场景，如智能问答、知识图谱等。</p>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>特性/数据库</th>
+<th><strong>Milvus</strong></th>
+<th><strong>Faiss</strong></th>
+<th><strong>Weaviate</strong></th>
+<th><strong>Qdrant</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>类型</strong></td>
+<td>开源分布式数据库</td>
+<td>开源库（非数据库）</td>
+<td>开源数据库</td>
+<td>开源数据库</td>
+</tr>
+<tr>
+<td><strong>部署方式</strong></td>
+<td>本地部署/云托管</td>
+<td>本地部署</td>
+<td>本地部署/云托管</td>
+<td>本地部署/云托管</td>
+</tr>
+<tr>
+<td><strong>扩展性</strong></td>
+<td>高（支持水平扩展）</td>
+<td>受限（无内建分布式支持）</td>
+<td>中（静态分片）</td>
+<td>高（支持水平扩展）</td>
+</tr>
+<tr>
+<td><strong>性能</strong></td>
+<td>索引构建速度快，查询延迟低</td>
+<td>高效，支持GPU加速</td>
+<td>支持多模态检索，延迟较高</td>
+<td>查询吞吐量高，延迟低</td>
+</tr>
+<tr>
+<td><strong>多模态支持</strong></td>
+<td>支持（文本、图像等）</td>
+<td>受限（主要为文本向量）</td>
+<td>强（内建图像、文本等支持）</td>
+<td>支持（文本、图像等）</td>
+</tr>
+<tr>
+<td><strong>混合检索</strong></td>
+<td>支持（关键词 + 向量）</td>
+<td>不支持</td>
+<td>支持（关键词 + 向量）</td>
+<td>支持（关键词 + 向量）</td>
+</tr>
+<tr>
+<td><strong>GPU加速</strong></td>
+<td>支持（NVIDIA CUDA）</td>
+<td>支持（NVIDIA CUDA）</td>
+<td>不支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td><strong>社区活跃度</strong></td>
+<td>高（Zilliz支持）</td>
+<td>高（Facebook支持）</td>
+<td>中（独立开发）</td>
+<td>中（独立开发）</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>大规模RAG、推荐系统、图像检索</td>
+<td>研究、原型开发</td>
+<td>智能问答、知识图谱、语义搜索</td>
+<td>中小规模RAG、语义搜索</td>
+</tr>
+</tbody>
+</table>
+</li>
 </ol>
 <h2 id="查询和检索模块"><a class="markdownIt-Anchor" href="#查询和检索模块"></a> 查询和检索模块</h2>
 <h3 id="查询变换"><a class="markdownIt-Anchor" href="#查询变换"></a> 查询变换</h3>
@@ -444,15 +542,32 @@
 </li>
 </ol>
 <h3 id="排序和后处理"><a class="markdownIt-Anchor" href="#排序和后处理"></a> 排序和后处理</h3>
-<p>经过前面的检索过程可能会得到很多相关文档，就需要进行筛选和排序。</p>
-<p>常用的筛选和排序策略包括：</p>
+<ol>
+<li>
+<p><strong>为什么要进行排序和后处理</strong></p>
+<p>经过前面的检索过程可能会得到很多相关文档，但是初步检索到的结果可能并不是最相关的（余弦相似度检索一般适用于做一个快速检索，可能没有办法完全捕获到用户问题和文档向量之间的上下文语义联系），所以需要进行 <strong>reranking</strong> 对这些候选文档进行筛选和排序，挑选出最相关、最有用的文档作为生成过程的输入。</p>
+</li>
+<li>
+<p><strong>常用的筛选和排序策略</strong></p>
 <ul>
-<li>基于相似度分数进行过滤和排序</li>
-<li>基于关键词进行过滤，比如限定包含或者不包含某些关键词</li>
-<li>让 LLM 基于返回的相关文档及其相关性得分来重新排序</li>
-<li>基于时间进行过滤和排序，比如只筛选最新的相关文档</li>
-<li>基于时间对相似度进行加权，然后进行排序和筛选</li>
+<li>
+<p>基于相似度分数进行过滤和排序</p>
+</li>
+<li>
+<p>基于关键词进行过滤，比如限定包含或者不包含某些关键词</p>
+</li>
+<li>
+<p>让 LLM 基于返回的相关文档及其相关性得分来重新排序</p>
+</li>
+<li>
+<p>基于时间进行过滤和排序，比如只筛选最新的相关文档</p>
+</li>
+<li>
+<p>基于时间对相似度进行加权，然后进行排序和筛选</p>
+</li>
 </ul>
+</li>
+</ol>
 <h2 id="回复生成模块"><a class="markdownIt-Anchor" href="#回复生成模块"></a> 回复生成模块</h2>
 <p><mark><strong>回复生成策略</strong></mark></p>
 <ol>
